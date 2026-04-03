@@ -1,1302 +1,1424 @@
 <!DOCTYPE html>
-<html lang="tc">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LiveSmart 生活智慧</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --ivory:      #F6F3ED;
-    --charcoal:   #1E1C1A;
-    --warm-mid:   #7B7368;
-    --gold:       #B09A74;
-    --gold-light: #C8B48E;
-    --stone:      #EAE5DC;
-    --stone-deep: #48433E;
-    --pure:       #FEFCF9;
-    --header-h:   88px; /* total header height */
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BrokerSmart — Insurance Client Manager</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f6f9; --sidebar-bg: #1a2540; --sidebar-hover: #243058; --sidebar-active: #2e3d6e;
+      --accent: #3b6ef8; --accent-hover: #2a5de0; --danger: #e74c3c; --success: #27ae60;
+      --warning: #f39c12; --text: #1e2535; --text-muted: #6b7280; --border: #e2e6ed;
+      --card: #ffffff; --sidebar-text: #a8b4c8; --sidebar-text-active: #ffffff;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; font-size: 14px; }
 
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; font-size:18px; }
-  body {
-    background:var(--ivory); color:var(--charcoal);
-    font-family:'Noto Sans TC', sans-serif;
-    overflow-x:hidden; line-height:1.9;
-  }
+    /* SIDEBAR */
+    #sidebar { width: 220px; min-height: 100vh; background: var(--sidebar-bg); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; z-index: 100; }
+    .sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .sidebar-logo .logo-mark { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -.5px; }
+    .sidebar-logo .logo-sub { font-size: 11px; color: var(--sidebar-text); margin-top: 2px; }
+    .nav-section { padding: 14px 0 6px 20px; font-size: 10px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; color: #4a5568; }
+    nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--sidebar-text); text-decoration: none; font-size: 13.5px; transition: background .15s, color .15s; cursor: pointer; }
+    nav a:hover { background: var(--sidebar-hover); color: #fff; }
+    nav a.active { background: var(--sidebar-active); color: var(--sidebar-text-active); border-left: 3px solid var(--accent); }
+    nav a .icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid rgba(255,255,255,.06); font-size: 12px; color: #4a5568; }
 
-  /* ─────────────────────────────────────────
-     HEADER  (single bar, more breathing room)
-  ───────────────────────────────────────── */
-  .site-header {
-    position:fixed; top:0; left:0; right:0; z-index:900;
-    height:var(--header-h);
-    display:flex; align-items:center;
-    padding:0 52px;
-    background:rgba(246,243,237,0.96);
-    backdrop-filter:blur(16px);
-    border-bottom:1px solid rgba(176,154,116,0.18);
-  }
+    /* MAIN */
+    #main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 28px; height: 58px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    header .page-title { font-size: 17px; font-weight: 600; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
 
-  /* SVG Logo mark + wordmark */
-  .logo-wrap {
-    display:flex; align-items:center; gap:14px;
-    text-decoration:none;
-    flex-shrink:0;
-  }
-  .logo-mark svg { display:block; }
-  .logo-text {
-    display:flex; flex-direction:column; line-height:1;
-  }
-  .logo-en {
-    font-family:'Cormorant Garamond', serif;
-    font-size:22px; font-weight:300; letter-spacing:0.22em;
-    color:var(--charcoal); text-transform:uppercase;
-  }
-  .logo-en span { color:var(--gold); font-style:italic; }
-  .logo-tc {
-    font-family:'Noto Serif TC', serif;
-    font-size:11px; font-weight:300; letter-spacing:0.35em;
-    color:var(--gold); margin-top:4px;
-  }
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; border: none; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .15s, opacity .15s; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: #f7f8fa; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { opacity: .88; }
+    .btn-sm { padding: 5px 11px; font-size: 12.5px; }
+    .btn-icon { padding: 6px 8px; background: transparent; border: 1px solid var(--border); border-radius: 7px; cursor: pointer; font-size: 14px; }
+    .btn-icon:hover { background: var(--bg); }
 
-  nav {
-    margin-left:auto; display:flex; align-items:center; gap:36px;
-  }
-  nav a {
-    font-family:'Noto Sans TC', sans-serif;
-    font-size:15px; font-weight:300; letter-spacing:0.06em;
-    color:var(--stone-deep); text-decoration:none; transition:color .3s;
-  }
-  nav a:hover { color:var(--gold); }
+    /* CONTENT */
+    #content { padding: 28px; flex: 1; }
+    .view { display: none; }
+    .view.active { display: block; }
 
-  /* language toggle */
-  .lang-toggle {
-    margin-left:32px; display:flex;
-    border:1px solid var(--gold); border-radius:2px; overflow:hidden;
-  }
-  .lang-btn {
-    padding:7px 18px; background:transparent; border:none; cursor:pointer;
-    font-family:'Noto Sans TC', sans-serif;
-    font-size:13px; letter-spacing:0.08em; color:var(--warm-mid);
-    transition:all .3s;
-  }
-  .lang-btn.active { background:var(--charcoal); color:var(--ivory); }
-  .lang-btn:hover:not(.active) { background:var(--stone); }
+    /* STAT CARDS */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--card); border-radius: 12px; padding: 18px 20px; border: 1px solid var(--border); }
+    .stat-card .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+    .stat-card .stat-value { font-size: 28px; font-weight: 700; margin-top: 6px; }
+    .stat-card .stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .stat-card.blue .stat-value { color: var(--accent); }
+    .stat-card.green .stat-value { color: var(--success); }
+    .stat-card.orange .stat-value { color: var(--warning); }
+    .stat-card.red .stat-value { color: var(--danger); }
 
-  /* ─────────────────────────────────────────
-     HERO
-  ───────────────────────────────────────── */
-  .hero {
-    min-height:100vh;
-    display:grid; grid-template-columns:1fr 1fr;
-    padding-top:var(--header-h);
-  }
-  .hero-left {
-    display:flex; flex-direction:column; justify-content:center;
-    padding:80px 60px 80px 72px; position:relative;
-  }
-  .hero-left::after {
-    content:''; position:absolute; top:10%; right:0; bottom:10%; width:1px;
-    background:linear-gradient(to bottom, transparent, var(--gold) 40%, var(--gold) 60%, transparent);
-  }
-  .hero-tag {
-    font-size:12px; letter-spacing:0.4em; color:var(--gold);
-    text-transform:uppercase; margin-bottom:28px;
-    font-family:'Noto Serif TC', serif;
-  }
-  .hero-title {
-    font-family:'Noto Serif TC', serif;
-    font-size:clamp(44px, 5vw, 72px); font-weight:300;
-    line-height:1.2; color:var(--charcoal); margin-bottom:24px;
-  }
-  .hero-title em { font-style:normal; color:var(--gold); }
-  /* English hero title */
-  body[lang="en"] .hero-title {
-    font-family:'Cormorant Garamond', serif;
-    font-size:clamp(54px, 6vw, 88px); font-weight:300; line-height:1.08;
-  }
-  body[lang="en"] .hero-title em { font-style:italic; }
+    /* TABLES */
+    .card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+    .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .card-title { font-size: 15px; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f8f9fb; }
+    th { padding: 11px 16px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .4px; border-bottom: 1px solid var(--border); }
+    td { padding: 13px 16px; border-bottom: 1px solid var(--border); font-size: 13.5px; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #f9fafc; }
 
-  .hero-sub {
-    font-size:17px; font-weight:300; color:var(--warm-mid);
-    margin-bottom:32px; line-height:1.75; max-width:420px;
-  }
-  body[lang="en"] .hero-sub {
-    font-family:'Cormorant Garamond', serif;
-    font-size:20px; font-style:italic;
-  }
-  .hero-desc {
-    font-size:17px; line-height:2; color:var(--stone-deep);
-    max-width:440px; margin-bottom:52px;
-  }
-  body[lang="en"] .hero-desc { font-size:18px; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #fff; }
+    .name-cell { display: flex; align-items: center; gap: 10px; }
+    .name-cell .name { font-weight: 500; }
+    .name-cell .email { font-size: 12px; color: var(--text-muted); }
 
-  .btn-primary {
-    display:inline-flex; align-items:center; gap:14px;
-    padding:18px 44px; background:var(--charcoal); color:var(--ivory);
-    text-decoration:none; border:none; cursor:pointer;
-    font-family:'Noto Sans TC', sans-serif;
-    font-size:15px; letter-spacing:0.12em;
-    transition:all .3s; align-self:flex-start;
-  }
-  body[lang="en"] .btn-primary {
-    font-family:'Cormorant Garamond', serif;
-    font-size:16px; letter-spacing:0.2em; text-transform:uppercase;
-  }
-  .btn-primary:hover { background:var(--gold); color:var(--charcoal); }
-  .btn-primary .arr { font-size:18px; transition:transform .3s; }
-  .btn-primary:hover .arr { transform:translateX(5px); }
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 100px; font-size: 11.5px; font-weight: 600; }
+    .badge-active { background: #d1fae5; color: #065f46; }
+    .badge-pending { background: #fef3c7; color: #92400e; }
+    .badge-inactive { background: #f3f4f6; color: #6b7280; }
+    .badge-lead { background: #dbeafe; color: #1e40af; }
+    .badge-obj { background: #ede9fe; color: #5b21b6; }
+    .badge-cov { background: #eff6ff; color: #1e40af; }
 
-  /* hero right image */
-  .hero-right {
-    position:relative; background:#111; overflow:hidden;
-    display:flex; align-items:stretch;
-  }
-  .hero-img-fill {
-    position:absolute; inset:0; width:100%; height:100%;
-    object-fit:cover; opacity:0; transition:opacity 1.2s ease;
-  }
-  .hero-img-fill.loaded { opacity:0.86; }
-  .hero-overlay {
-    position:absolute; inset:0; z-index:1;
-    background:linear-gradient(to right, rgba(18,14,10,.52) 0%, transparent 60%);
-  }
-  .hero-stats {
-    position:absolute; bottom:44px; left:44px; z-index:2;
-    display:flex; gap:24px; align-items:center;
-  }
-  .hstat { text-align:center; }
-  .hstat-n {
-    display:block; font-family:'Cormorant Garamond', serif;
-    font-size:32px; font-weight:300; color:var(--gold-light); line-height:1;
-  }
-  .hstat-l {
-    font-size:11px; letter-spacing:0.1em; color:rgba(246,243,237,.5);
-    font-family:'Noto Sans TC', sans-serif;
-  }
-  .hstat-div { width:1px; height:44px; background:rgba(176,154,116,.3); }
+    .actions-cell { display: flex; gap: 6px; }
 
-  /* shimmer */
-  .shimmer {
-    position:absolute; inset:0; z-index:0;
-    background:linear-gradient(110deg,#131008 25%,#1d1810 50%,#131008 75%);
-    background-size:200% 100%; animation:sh 1.8s infinite;
-    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
-  }
-  @keyframes sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-  .shimmer-char {
-    font-size:72px; color:rgba(176,154,116,.07);
-    font-family:'Noto Serif TC', serif;
-  }
-  .shimmer-txt {
-    font-size:11px; letter-spacing:0.32em; color:rgba(176,154,116,.28);
-    font-family:'Noto Sans TC', sans-serif;
-  }
+    /* SEARCH */
+    .search-wrap { position: relative; }
+    .search-wrap input { padding: 8px 14px 8px 36px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; width: 240px; outline: none; background: var(--bg); }
+    .search-wrap input:focus { border-color: var(--accent); background: #fff; }
+    .search-wrap .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; pointer-events: none; }
 
-  /* ─────────────────────────────────────────
-     DIVIDER
-  ───────────────────────────────────────── */
-  .sec-divider {
-    display:flex; align-items:center; gap:24px;
-    padding:0 72px; margin:72px 0 0;
-  }
-  .div-line { flex:1; height:1px; background:linear-gradient(to right, transparent, var(--gold), transparent); }
-  .div-mark { font-size:16px; color:var(--gold); opacity:.6; }
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 200; align-items: flex-start; justify-content: center; padding: 30px 20px; overflow-y: auto; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--card); border-radius: 14px; width: 100%; max-width: 780px; box-shadow: 0 20px 60px rgba(0,0,0,.25); animation: slideUp .2s ease; }
+    @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-size: 17px; font-weight: 600; }
+    .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); line-height: 1; }
+    .modal-close:hover { color: var(--text); }
 
-  /* ─────────────────────────────────────────
-     LIFESTYLE STRIP
-  ───────────────────────────────────────── */
-  .lifestyle-strip {
-    padding:0 72px 96px;
-    display:grid; grid-template-columns:2fr 1fr 1fr; gap:14px;
-  }
-  .lf-wrap { position:relative; overflow:hidden; min-height:320px; }
-  .lf-wrap img { width:100%; height:100%; object-fit:cover; transition:transform .6s; display:block; }
-  .lf-wrap:hover img { transform:scale(1.035); }
-  .lf-cap {
-    position:absolute; bottom:0; left:0; right:0;
-    padding:18px 22px 14px;
-    background:linear-gradient(to top, rgba(14,10,6,.72), transparent);
-    font-family:'Noto Serif TC', serif; font-size:15px;
-    color:rgba(246,243,237,.88); letter-spacing:0.05em;
-  }
-  body[lang="en"] .lf-cap {
-    font-family:'Cormorant Garamond', serif;
-    font-size:16px; font-style:italic;
-  }
+    .modal-body { padding: 24px; max-height: 68vh; overflow-y: auto; }
+    .tab-pane { display: block; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
 
-  /* ─────────────────────────────────────────
-     SECTION LABELS / TITLES
-  ───────────────────────────────────────── */
-  .sec-label {
-    font-family:'Noto Serif TC', serif; font-size:12px;
-    letter-spacing:0.4em; color:var(--gold);
-    text-transform:uppercase; margin-bottom:14px;
-  }
-  .sec-title {
-    font-family:'Noto Serif TC', serif;
-    font-size:clamp(34px, 4vw, 52px); font-weight:300;
-    line-height:1.25; color:var(--charcoal); margin-bottom:56px; max-width:560px;
-  }
-  body[lang="en"] .sec-title {
-    font-family:'Cormorant Garamond', serif;
-    font-size:clamp(38px, 4.5vw, 58px); font-weight:300;
-  }
+    /* FORM */
+    .form-section { margin-bottom: 22px; }
+    .form-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text-muted); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-grid.col3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-full { grid-column: 1 / -1; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 12.5px; font-weight: 500; color: var(--text-muted); }
+    input, select, textarea { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; font-family: inherit; outline: none; transition: border-color .15s; background: #fff; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 72px; }
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    .checkbox-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .checkbox-item input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--accent); }
+    .radio-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+    .radio-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .radio-item input[type=radio] { width: 15px; height: 15px; accent-color: var(--accent); }
+    .sub-field { margin-top: 10px; padding: 12px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); }
+    .sub-field label { color: var(--text); }
 
-  /* ─────────────────────────────────────────
-     BENEFITS
-  ───────────────────────────────────────── */
-  .benefits { padding:96px 72px; }
-  .benefits-grid {
-    display:grid; grid-template-columns:repeat(3,1fr);
-    gap:1px; background:rgba(176,154,116,.25);
-  }
-  .benefit-card { background:var(--pure); padding:52px 40px; transition:background .4s; }
-  .benefit-card:hover { background:var(--stone); }
-  .benefit-num {
-    font-family:'Cormorant Garamond', serif; font-size:64px; font-weight:300;
-    color:var(--stone); line-height:1; margin-bottom:10px;
-  }
-  .benefit-title {
-    font-family:'Noto Serif TC', serif; font-size:20px; font-weight:400;
-    color:var(--charcoal); margin-bottom:14px;
-  }
-  body[lang="en"] .benefit-title {
-    font-family:'Cormorant Garamond', serif; font-size:23px;
-  }
-  .benefit-desc { font-size:15px; line-height:1.95; color:var(--warm-mid); }
-  body[lang="en"] .benefit-desc { font-size:16px; }
+    /* PROTECTION NEEDS TABLE */
+    .needs-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    .needs-table th { background: #f8f9fb; padding: 8px 10px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .3px; border: 1px solid var(--border); }
+    .needs-table td { padding: 8px 10px; border: 1px solid var(--border); vertical-align: middle; }
+    .needs-table td input { border: none; background: transparent; padding: 4px 0; font-size: 13px; width: 100%; outline: none; }
+    .needs-table td input:focus { background: #f0f4ff; border-radius: 4px; padding: 4px 6px; }
+    .shortfall-cell { font-weight: 600; color: var(--danger); background: #fff5f5; }
+    .needs-table .row-label { font-size: 12.5px; font-weight: 500; }
 
-  /* ─────────────────────────────────────────
-     HOW IT WORKS
-  ───────────────────────────────────────── */
-  .how-it-works {
-    padding:96px 72px; background:var(--charcoal); color:var(--ivory);
-    display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center;
-  }
-  .hiw-left .sec-label { color:var(--gold-light); }
-  .hiw-left .sec-title { color:var(--ivory); margin-bottom:44px; }
-  .hiw-step {
-    display:flex; gap:24px; margin-bottom:40px; padding-bottom:40px;
-    border-bottom:1px solid rgba(176,154,116,.15);
-  }
-  .hiw-step:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
-  .hiw-num {
-    font-family:'Noto Serif TC', serif; font-size:36px;
-    color:var(--gold); opacity:.4; line-height:1; flex-shrink:0; width:42px;
-  }
-  .hiw-content h3 {
-    font-family:'Noto Serif TC', serif; font-size:19px; font-weight:400;
-    margin-bottom:8px; color:var(--ivory);
-  }
-  body[lang="en"] .hiw-content h3 {
-    font-family:'Cormorant Garamond', serif; font-size:22px;
-  }
-  .hiw-content p { font-size:15px; line-height:1.9; color:rgba(246,243,237,.55); }
-  body[lang="en"] .hiw-content p { font-size:16px; }
-  .hiw-right { display:flex; flex-direction:column; gap:18px; }
-  .stat-box {
-    background:rgba(255,255,255,.035); border:1px solid rgba(176,154,116,.18);
-    padding:32px 36px; position:relative;
-  }
-  .stat-box::before {
-    content:''; position:absolute; top:0; left:0;
-    width:3px; height:100%; background:var(--gold);
-  }
-  .stat-num {
-    font-family:'Cormorant Garamond', serif; font-size:48px; font-weight:300;
-    color:var(--gold-light); line-height:1; margin-bottom:7px;
-  }
-  .stat-label { font-size:14px; color:rgba(246,243,237,.5); letter-spacing:0.04em; }
+    /* PROFILE */
+    .profile-header { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px; }
+    .profile-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .profile-name { font-size: 20px; font-weight: 700; }
+    .profile-meta { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .profile-badges { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 
-  /* ─────────────────────────────────────────
-     PHILOSOPHY (softer — no hard-sell)
-  ───────────────────────────────────────── */
-  .philosophy { padding:112px 72px; text-align:center; position:relative; overflow:hidden; }
-  .philosophy::before {
-    content:'健'; position:absolute; top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    font-family:'Noto Serif TC', serif; font-size:40vw;
-    color:rgba(176,154,116,.04); pointer-events:none;
-  }
-  .philosophy-inner { position:relative; z-index:1; max-width:740px; margin:0 auto; }
-  .philosophy blockquote {
-    font-family:'Noto Serif TC', serif;
-    font-size:clamp(22px, 2.8vw, 36px); font-weight:300;
-    line-height:1.75; color:var(--charcoal); margin-bottom:28px;
-  }
-  body[lang="en"] .philosophy blockquote {
-    font-family:'Cormorant Garamond', serif;
-    font-size:clamp(26px, 3.2vw, 42px); font-style:italic;
-  }
-  .philosophy-attr {
-    font-size:12px; letter-spacing:0.35em; color:var(--gold); text-transform:uppercase;
-    font-family:'Noto Serif TC', serif;
-  }
+    .profile-panel { display: block; margin-bottom: 20px; }
 
-  /* ─────────────────────────────────────────
-     PRODUCT SHOWCASE
-  ───────────────────────────────────────── */
-  .product-section {
-    padding:96px 72px; background:var(--pure);
-  }
-  .product-layout {
-    display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start;
-  }
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .profile-grid.col3 { grid-template-columns: 1fr 1fr 1fr; }
+    .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .info-card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); margin-bottom: 14px; }
+    .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; gap: 12px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .info-label { color: var(--text-muted); font-size: 12.5px; flex-shrink: 0; }
+    .info-row .info-value { font-weight: 500; text-align: right; }
 
-  /* image gallery */
-  .prod-gallery { position:sticky; top:108px; }
-  .prod-main-img {
-    width:100%; aspect-ratio:4/3; overflow:hidden;
-    background:var(--charcoal);
-    display:flex; align-items:center; justify-content:center;
-    margin-bottom:12px;
-  }
-  .prod-main-img img {
-    width:100%; height:100%; object-fit:contain;
-    padding:32px;
-    transition:transform .5s ease;
-  }
-  .prod-main-img:hover img { transform:scale(1.04); }
-  .prod-thumbs {
-    display:flex; gap:10px;
-  }
-  .prod-thumb {
-    width:80px; height:60px; overflow:hidden; cursor:pointer;
-    border:2px solid transparent; transition:border-color .25s;
-    background:var(--charcoal);
-    display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  }
-  .prod-thumb.active { border-color:var(--gold); }
-  .prod-thumb img { width:100%; height:100%; object-fit:contain; padding:6px; }
+    /* NEEDS ANALYSIS PROFILE TABLE */
+    .analysis-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .analysis-table th { background: #f8f9fb; padding: 9px 12px; text-align: right; font-size: 11.5px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    .analysis-table th:first-child { text-align: left; }
+    .analysis-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: right; }
+    .analysis-table td:first-child { text-align: left; font-size: 13px; }
+    .analysis-table tr:last-child td { border-bottom: none; }
+    .analysis-table .shortfall { color: var(--danger); font-weight: 600; }
+    .analysis-table .ok { color: var(--success); font-weight: 600; }
 
-  /* product info panel */
-  .prod-info {}
-  .prod-model {
-    font-family:'Cormorant Garamond', serif;
-    font-size:13px; letter-spacing:0.35em; color:var(--gold);
-    text-transform:uppercase; margin-bottom:12px;
-  }
-  .prod-name {
-    font-family:'Noto Serif TC', serif;
-    font-size:clamp(28px,3.2vw,42px); font-weight:300;
-    line-height:1.25; color:var(--charcoal); margin-bottom:20px;
-  }
-  body[lang="en"] .prod-name {
-    font-family:'Cormorant Garamond', serif;
-    font-size:clamp(32px,3.5vw,48px);
-  }
-  .prod-tagline {
-    font-size:16px; line-height:1.85; color:var(--warm-mid);
-    margin-bottom:40px; max-width:460px;
-  }
-  body[lang="en"] .prod-tagline { font-size:17px; }
+    /* CHILDREN TABLE */
+    .children-grid { display: grid; gap: 12px; }
+    .child-card { background: #f8f9fb; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .child-card-name { font-weight: 600; font-size: 14px; margin-bottom: 8px; }
 
-  /* spec table */
-  .spec-table {
-    width:100%; border-collapse:collapse; margin-bottom:40px;
-  }
-  .spec-table tr { border-bottom:1px solid rgba(176,154,116,.18); }
-  .spec-table tr:last-child { border-bottom:none; }
-  .spec-table td {
-    padding:14px 0; font-size:15px; line-height:1.6; vertical-align:top;
-  }
-  .spec-table td:first-child {
-    font-family:'Noto Serif TC', serif;
-    color:var(--gold); font-size:13px; letter-spacing:0.06em;
-    width:120px; padding-right:20px; white-space:nowrap;
-  }
-  body[lang="en"] .spec-table td:first-child {
-    font-family:'Cormorant Garamond', serif; font-size:14px; width:140px;
-  }
-  .spec-table td:last-child { color:var(--stone-deep); font-weight:300; }
-  body[lang="en"] .spec-table td:last-child { font-size:15px; }
+    .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0; margin-bottom: 16px; }
+    .back-btn:hover { text-decoration: underline; }
 
-  .prod-note {
-    font-size:13px; color:var(--warm-mid); line-height:1.7;
-    border-left:2px solid var(--gold); padding-left:14px; opacity:.75;
-  }
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+    .empty-state .empty-icon { font-size: 42px; margin-bottom: 14px; }
+    .empty-state h3 { font-size: 16px; font-weight: 600; color: var(--text); }
+    .empty-state p { font-size: 13.5px; margin-top: 6px; }
 
-  @media(max-width:960px){
-    .product-layout { grid-template-columns:1fr; }
-    .prod-gallery { position:static; }
-    .product-section { padding-left:28px; padding-right:28px; }
-  }
+    /* TOAST */
+    #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+    .toast { background: #1e2535; color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 13.5px; max-width: 300px; animation: toastIn .2s ease; display: flex; align-items: center; gap: 8px; }
+    .toast.success { background: #065f46; }
+    .toast.error { background: #7f1d1d; }
+    @keyframes toastIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-  /* ─────────────────────────────────────────
-     FEATURES
-  ───────────────────────────────────────── */
-  .features { padding:96px 72px; background:var(--stone); }
-  .features-grid { display:grid; grid-template-columns:1fr 2fr; gap:72px; align-items:start; }
-  .features-sticky { position:sticky; top:108px; }
-  .features-sticky .sec-title { margin-bottom:28px; }
-  .features-sticky p { font-size:16px; line-height:1.9; color:var(--warm-mid); max-width:300px; }
-  .feature-list { display:flex; flex-direction:column; gap:1px; background:rgba(176,154,116,.22); }
-  .feature-item {
-    background:var(--stone); padding:34px 38px;
-    display:flex; gap:18px; align-items:flex-start;
-    border-left:3px solid transparent; transition:all .3s;
-  }
-  .feature-item:hover { background:var(--ivory); border-left-color:var(--gold); }
-  .feature-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:10px; }
-  .feature-text h4 {
-    font-family:'Noto Serif TC', serif; font-size:18px; font-weight:400;
-    color:var(--charcoal); margin-bottom:7px;
-  }
-  body[lang="en"] .feature-text h4 {
-    font-family:'Cormorant Garamond', serif; font-size:21px;
-  }
-  .feature-text p { font-size:15px; line-height:1.85; color:var(--warm-mid); }
-  body[lang="en"] .feature-text p { font-size:15px; }
+    /* CONFIRM */
+    .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 300; align-items: center; justify-content: center; }
+    .confirm-overlay.open { display: flex; }
+    .confirm-box { background: #fff; border-radius: 12px; padding: 28px; max-width: 380px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,.2); text-align: center; }
+    .confirm-box h3 { font-size: 16px; margin-bottom: 10px; }
+    .confirm-box p { color: var(--text-muted); font-size: 13.5px; margin-bottom: 22px; }
+    .confirm-actions { display: flex; gap: 10px; justify-content: center; }
 
-  /* ─────────────────────────────────────────
-     TESTIMONIALS
-  ───────────────────────────────────────── */
-  .testimonials { padding:96px 72px; background:var(--pure); }
-  .testi-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:36px; margin-top:56px; }
-  .testi-card { padding:48px; border:1px solid var(--stone); position:relative; }
-  .testi-card::before {
-    content:'❝'; position:absolute; top:22px; right:28px;
-    font-family:'Cormorant Garamond', serif; font-size:64px;
-    color:var(--gold); opacity:.2; line-height:1;
-  }
-  .testi-text { font-size:17px; line-height:1.95; color:var(--stone-deep); margin-bottom:26px; }
-  body[lang="en"] .testi-text { font-size:17px; font-style:italic; }
-  .testi-author { display:flex; align-items:center; gap:14px; }
-  .testi-avatar { width:48px; height:48px; border-radius:50%; background:var(--stone); display:flex; align-items:center; justify-content:center; font-size:22px; }
-  .testi-name { font-family:'Noto Serif TC', serif; font-size:17px; font-weight:400; color:var(--charcoal); }
-  body[lang="en"] .testi-name { font-family:'Cormorant Garamond', serif; font-size:18px; font-weight:600; }
-  .testi-role { font-size:13px; color:var(--warm-mid); margin-top:3px; letter-spacing:.04em; }
+    /* FILTERS */
+    .filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    select.filter-select { padding: 7px 12px; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; }
 
-  /* ─────────────────────────────────────────
-     CTA  (gentle, not pushy)
-  ───────────────────────────────────────── */
-  .cta-section { padding:120px 72px; background:var(--charcoal); text-align:center; position:relative; overflow:hidden; }
-  .cta-section::before {
-    content:'LiveSmart'; position:absolute; top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    font-family:'Cormorant Garamond', serif; font-size:16vw; font-weight:300;
-    color:rgba(255,255,255,.02); white-space:nowrap; pointer-events:none;
-  }
-  .cta-inner { position:relative; z-index:1; }
-  .cta-section .sec-label { color:var(--gold-light); }
-  .cta-title {
-    font-family:'Noto Serif TC', serif;
-    font-size:clamp(36px, 4.5vw, 62px); font-weight:300;
-    color:var(--ivory); margin:14px 0 20px; line-height:1.25;
-  }
-  body[lang="en"] .cta-title {
-    font-family:'Cormorant Garamond', serif;
-    font-size:clamp(40px, 5vw, 70px); font-weight:300;
-  }
-  .cta-sub {
-    font-size:17px; color:rgba(246,243,237,.5);
-    margin-bottom:52px; max-width:500px; margin-left:auto; margin-right:auto; line-height:1.9;
-  }
-  body[lang="en"] .cta-sub { font-size:18px; }
-  .cta-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
-  .btn-outline {
-    display:inline-flex; align-items:center; gap:10px;
-    padding:18px 44px; background:transparent; color:var(--gold-light);
-    border:1px solid var(--gold); text-decoration:none; cursor:pointer;
-    font-family:'Noto Sans TC', sans-serif; font-size:15px;
-    letter-spacing:0.1em; transition:all .3s;
-  }
-  body[lang="en"] .btn-outline {
-    font-family:'Cormorant Garamond', serif; font-size:16px;
-    letter-spacing:0.18em; text-transform:uppercase;
-  }
-  .btn-outline:hover { background:var(--gold); color:var(--charcoal); }
+    /* SECTION DIVIDER IN PROFILE */
+    .section-note { font-size: 12px; color: var(--text-muted); background: #f8f9fb; padding: 8px 12px; border-radius: 8px; margin-top: 10px; }
 
-  /* ─────────────────────────────────────────
-     FOOTER
-  ───────────────────────────────────────── */
-  footer {
-    padding:56px 72px; background:#0d0c0a;
-    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
-  }
-  .footer-logo-wrap { display:flex; align-items:center; gap:12px; }
-  .footer-logo-en {
-    font-family:'Cormorant Garamond', serif; font-size:22px;
-    font-weight:300; letter-spacing:.22em; color:var(--ivory); text-transform:uppercase;
-  }
-  .footer-logo-en span { color:var(--gold); font-style:italic; }
-  .footer-logo-tc {
-    font-family:'Noto Serif TC', serif; font-size:12px; letter-spacing:.2em;
-    color:rgba(246,243,237,.28);
-  }
-  .footer-links { display:flex; gap:24px; flex-wrap:wrap; }
-  .footer-links a {
-    font-size:13px; color:rgba(246,243,237,.3); text-decoration:none;
-    letter-spacing:.06em; transition:color .3s;
-  }
-  .footer-links a:hover { color:var(--gold); }
-  .footer-copy { font-size:12px; color:rgba(246,243,237,.2); letter-spacing:.06em; }
-
-  /* ─────────────────────────────────────────
-     PRODUCT SECTION
-  ───────────────────────────────────────── */
-  .product-section { padding:100px 72px; background:var(--pure); }
-  .product-layout {
-    display:grid; grid-template-columns:1fr 1fr;
-    gap:72px; align-items:start; margin-top:56px;
-  }
-  .prod-gallery { position:sticky; top:110px; }
-  .prod-main-img {
-    width:100%; aspect-ratio:4/3;
-    background:#111; border-radius:2px; overflow:hidden;
-    margin-bottom:14px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .prod-main-img img {
-    width:100%; height:100%; object-fit:contain;
-    padding:20px; transition:opacity .35s;
-  }
-  .prod-thumbs { display:flex; gap:12px; }
-  .prod-thumb {
-    width:88px; height:72px;
-    border:1px solid rgba(176,154,116,.25); border-radius:2px;
-    overflow:hidden; cursor:pointer; transition:border-color .25s;
-    background:#111; display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  }
-  .prod-thumb.active { border-color:var(--gold); }
-  .prod-thumb img { width:100%; height:100%; object-fit:contain; padding:6px; }
-  .prod-thumb:hover { border-color:var(--gold-light); }
-
-  .prod-model {
-    font-family:'Cormorant Garamond', serif;
-    font-size:12px; letter-spacing:0.4em; color:var(--gold);
-    text-transform:uppercase; margin-bottom:12px;
-  }
-  .prod-name {
-    font-family:'Noto Serif TC', serif;
-    font-size:clamp(26px,3vw,38px); font-weight:300;
-    line-height:1.3; color:var(--charcoal); margin-bottom:18px;
-  }
-  body[lang="en"] .prod-name {
-    font-family:'Cormorant Garamond', serif;
-    font-size:clamp(28px,3.2vw,44px);
-  }
-  .prod-tagline {
-    font-size:16px; line-height:1.9; color:var(--warm-mid);
-    margin-bottom:36px; max-width:460px;
-  }
-  body[lang="en"] .prod-tagline { font-size:17px; }
-  .spec-heading {
-    font-family:'Noto Serif TC', serif; font-size:12px;
-    letter-spacing:0.35em; color:var(--gold); text-transform:uppercase;
-    margin-bottom:14px; padding-bottom:10px;
-    border-bottom:1px solid rgba(176,154,116,.2);
-  }
-  body[lang="en"] .spec-heading { font-family:'Cormorant Garamond', serif; font-size:13px; }
-  .spec-table { width:100%; border-collapse:collapse; margin-bottom:32px; }
-  .spec-table tr { border-bottom:1px solid rgba(176,154,116,.13); }
-  .spec-table tr:last-child { border-bottom:none; }
-  .spec-table td { padding:12px 0; font-size:15px; line-height:1.6; vertical-align:top; }
-  .spec-table td:first-child {
-    font-family:'Noto Serif TC', serif; color:var(--warm-mid);
-    font-size:13px; letter-spacing:0.04em;
-    width:115px; padding-right:16px; white-space:nowrap;
-  }
-  body[lang="en"] .spec-table td:first-child {
-    font-family:'Cormorant Garamond', serif; font-size:14px; width:130px;
-  }
-  .spec-table td:last-child { color:var(--stone-deep); font-weight:300; }
-  .prod-note {
-    font-size:13px; color:var(--warm-mid); line-height:1.75;
-    border-left:2px solid rgba(176,154,116,.4); padding-left:14px;
-  }
-  @media(max-width:960px){
-    .product-layout { grid-template-columns:1fr; }
-    .prod-gallery { position:static; }
-    .product-section { padding-left:28px; padding-right:28px; }
-  }
-
-  /* ─────────────────────────────────────────
-     FADE-IN
-  ───────────────────────────────────────── */
-  .fade-in { opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease; }
-  .fade-in.visible { opacity:1; transform:translateY(0); }
-
-  /* ─────────────────────────────────────────
-     LANG HELPERS — TC is default/visible
-  ───────────────────────────────────────── */
-  [data-lang="en"] { display:none; }
-  /* when body[lang="en"] → flip */
-  body[lang="en"] [data-lang="en"] { display:block; }
-  body[lang="en"] [data-lang="tc"] { display:none !important; }
-
-  /* ─────────────────────────────────────────
-     RESPONSIVE
-  ───────────────────────────────────────── */
-  @media(max-width:960px){
-    :root { --header-h:72px; }
-    .hero { grid-template-columns:1fr; }
-    .hero-right { min-height:58vw; }
-    .site-header { padding:0 24px; }
-    nav { display:none; }
-    .hero-left { padding:60px 28px; }
-    .benefits,.testimonials,.features,.how-it-works,.philosophy,.cta-section { padding-left:28px; padding-right:28px; }
-    .benefits-grid,.testi-grid { grid-template-columns:1fr; }
-    .how-it-works,.features-grid { grid-template-columns:1fr; }
-    .lifestyle-strip { padding:0 28px 80px; grid-template-columns:1fr; }
-    .sec-divider { padding:0 28px; }
-    footer { padding:40px 28px; flex-direction:column; text-align:center; }
-  }
-</style>
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .profile-grid, .profile-grid.col3 { grid-template-columns: 1fr; }
+      .form-grid, .form-grid.col3 { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body lang="tc">
+<body>
 
-<!-- ══════════════════════════════════════
-     HEADER
-══════════════════════════════════════ -->
-<header class="site-header">
-
-  <!-- SVG Logo mark -->
-  <a class="logo-wrap" href="#">
-    <div class="logo-mark">
-      <svg width="42" height="42" viewBox="0 0 66 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Frequency bars: bell-curve short-medium-tall-medium-short -->
-        <rect x="3"  y="44" width="10" height="14" rx="5" fill="#B09A74" opacity="0.45"/>
-        <rect x="17" y="28" width="10" height="30" rx="5" fill="#B09A74" opacity="0.7"/>
-        <rect x="31" y="8"  width="10" height="50" rx="5" fill="#B09A74"/>
-        <rect x="45" y="28" width="10" height="30" rx="5" fill="#B09A74" opacity="0.7"/>
-        <rect x="59" y="44" width="10" height="14" rx="5" fill="#B09A74" opacity="0.45"/>
-      </svg>
-    </div>
-    <div class="logo-text">
-      <div class="logo-en">Live<span>Smart</span></div>
-      <div class="logo-tc">生 活 智 慧</div>
-    </div>
-  </a>
-
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">BrokerSmart</div>
+    <div class="logo-sub">Insurance Client Manager</div>
+  </div>
+  <div class="nav-section">Main</div>
   <nav>
-    <a href="#product" data-lang="tc">產品介紹</a>
-    <a href="#product" data-lang="en">Product</a>
-    <a href="#benefits" data-lang="tc">健康功效</a>
-    <a href="#benefits" data-lang="en">Benefits</a>
-    <a href="#how" data-lang="tc">使用方法</a>
-    <a href="#how" data-lang="en">How It Works</a>
-    <a href="#features" data-lang="tc">產品特點</a>
-    <a href="#features" data-lang="en">Features</a>
-    <a href="#contact" data-lang="tc">聯絡我們</a>
-    <a href="#contact" data-lang="en">Contact</a>
+    <a class="active" data-view="dashboard"><span class="icon">▦</span> Dashboard</a>
+    <a data-view="customers"><span class="icon">👤</span> Clients</a>
+    <a data-view="leads"><span class="icon">⭐</span> Leads</a>
   </nav>
-
-  <div class="lang-toggle">
-    <button class="lang-btn" onclick="setLang('en')">EN</button>
-    <button class="lang-btn active" onclick="setLang('tc')">中文</button>
-  </div>
-</header>
-
-
-<!-- ══════════════════════════════════════
-     HERO
-══════════════════════════════════════ -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-tag" data-lang="tc">全身健康護理</div>
-    <div class="hero-tag" data-lang="en">Whole Body Wellness</div>
-
-    <h1 class="hero-title">
-      <span data-lang="tc">讓身體<br>感受<em>律動</em><br>的溫柔</span>
-      <span data-lang="en">Feel the<br>Harmony<br>of <em>Movement</em></span>
-    </h1>
-
-    <p class="hero-sub">
-      <span data-lang="tc">源自日本的設計美學，貼近您的日常生活</span>
-      <span data-lang="en">Japanese-inspired design, made for everyday life</span>
-    </p>
-
-    <p class="hero-desc">
-      <span data-lang="tc">LiveSmart 全身律動健康平台，以低衝擊、無負擔的方式，幫助您輕鬆維持身體健康。靜靜放在家中，每天只需短短幾分鐘。</span>
-      <span data-lang="en">LiveSmart is a whole-body vibration platform that supports your health gently and effortlessly at home. Just a few quiet minutes each day is all it takes.</span>
-    </p>
-
-    <a class="btn-primary" href="#contact">
-      <span data-lang="tc">進一步了解</span>
-      <span data-lang="en">Learn More</span>
-      <span class="arr">→</span>
-    </a>
-  </div>
-
-  <div class="hero-right">
-    <div class="shimmer" id="heroShimmer">
-      <div class="shimmer-char">和</div>
-      <div class="shimmer-txt" data-lang="tc">圖像生成中…</div>
-      <div class="shimmer-txt" data-lang="en">Generating image…</div>
-    </div>
-    <img id="heroImg" class="hero-img-fill" alt="LiveSmart wellness device"/>
-    <div class="hero-overlay"></div>
-    <div class="hero-stats">
-      <div class="hstat">
-        <span class="hstat-n">3Hz</span>
-        <span class="hstat-l" data-lang="tc">精準振頻</span>
-        <span class="hstat-l" data-lang="en">Precision</span>
-      </div>
-      <div class="hstat-div"></div>
-      <div class="hstat">
-        <span class="hstat-n">98%</span>
-        <span class="hstat-l" data-lang="tc">用戶滿意</span>
-        <span class="hstat-l" data-lang="en">Satisfaction</span>
-      </div>
-      <div class="hstat-div"></div>
-      <div class="hstat">
-        <span class="hstat-n">10+</span>
-        <span class="hstat-l" data-lang="tc">年研發</span>
-        <span class="hstat-l" data-lang="en">Years R&D</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- divider -->
-<div class="sec-divider"><div class="div-line"></div><div class="div-mark">✦</div><div class="div-line"></div></div>
-
-<!-- ══════════════════════════════════════
-     LIFESTYLE STRIP
-══════════════════════════════════════ -->
-<div class="lifestyle-strip">
-  <div class="lf-wrap" id="lf0"><div class="shimmer"><div class="shimmer-char">静</div></div></div>
-  <div class="lf-wrap" id="lf1"><div class="shimmer"><div class="shimmer-char">健</div></div></div>
-  <div class="lf-wrap" id="lf2"><div class="shimmer"><div class="shimmer-char">暮</div></div></div>
+  <div class="nav-section">Records</div>
+  <nav>
+    <a data-view="policies"><span class="icon">📋</span> Policies</a>
+    <a data-view="renewals"><span class="icon">🔄</span> Renewals</a>
+  </nav>
+  <div class="sidebar-footer">BrokerSmart v2.0 · FNA Ready</div>
 </div>
 
-<!-- ══════════════════════════════════════
-     PRODUCT — GS2
-══════════════════════════════════════ -->
-<section class="product-section" id="product">
-  <div class="sec-label" data-lang="tc">主打產品</div>
-  <div class="sec-label" data-lang="en">Our Product</div>
-  <h2 class="sec-title" style="margin-bottom:0">
-    <span data-lang="tc">精選推薦</span>
-    <span data-lang="en">Featured Model</span>
-  </h2>
+<!-- MAIN -->
+<div id="main">
+  <header>
+    <div class="page-title" id="header-title">Dashboard</div>
+    <div class="header-actions">
+      <button class="btn btn-primary" id="header-add-btn" onclick="openAddModal()">+ Add Client</button>
+    </div>
+  </header>
+  <div id="content">
 
-  <div class="product-layout">
-
-    <!-- Gallery -->
-    <div class="prod-gallery">
-      <div class="prod-main-img">
-        <img id="mainImg"
-          src="Product%20photo1.jpeg"
-          alt="Vitality Vertical Vibration Machine" />
-      </div>
-      <div class="prod-thumbs">
-        <div class="prod-thumb active" onclick="switchImg(this,'Product%20photo1.jpeg')">
-          <img src="Product%20photo1.jpeg" alt="View 1"/>
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Recent Clients</span>
+          <button class="btn btn-secondary btn-sm" onclick="navigate('customers')">View all</button>
         </div>
-        <div class="prod-thumb" onclick="switchImg(this,'Product%20photo2.jpeg')">
-          <img src="Product%20photo2.jpeg" alt="View 2"/>
-        </div>
-        <div class="prod-thumb" onclick="switchImg(this,'Product%20photo3.jpeg')">
-          <img src="Product%20photo3.jpeg" alt="View 3"/>
-        </div>
+        <table><thead><tr><th>Client</th><th>Status</th><th>Objectives</th><th>Coverage</th><th>Added</th></tr></thead>
+        <tbody id="recent-tbody"></tbody></table>
       </div>
     </div>
 
-    <!-- Info + Specs -->
-    <div class="prod-info fade-in">
-      <h3 class="prod-name">
-        <span data-lang="tc">活力全身垂直律動機</span>
-        <span data-lang="en">Vitality Vertical Vibration Machine</span>
-      </h3>
-      <p class="prod-tagline">
-        <span data-lang="tc">以溫和的垂直律動，輕柔喚醒全身肌肉與骨骼。無線遙控操作，靜音設計，輕鬆融入您的日常生活。</span>
-        <span data-lang="en">Gentle vertical vibration that quietly awakens muscles and bones throughout the body. Wireless remote, silent motor, effortlessly part of your day.</span>
-      </p>
+    <!-- CLIENTS -->
+    <div class="view" id="view-customers">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">All Clients</span>
+          <div class="filter-bar">
+            <div class="search-wrap">
+              <span class="search-icon">&#9906;</span>
+              <input type="text" id="client-search" placeholder="Search clients…" oninput="renderClients()" />
+            </div>
+            <select class="filter-select" id="status-filter" onchange="renderClients()">
+              <option value="">All Statuses</option>
+              <option>Active</option><option>Pending</option><option>Inactive</option><option>Lead</option>
+            </select>
+          </div>
+        </div>
+        <table><thead><tr><th>Client</th><th>Phone</th><th>Status</th><th>Coverage</th><th>FNA Objectives</th><th>Actions</th></tr></thead>
+        <tbody id="clients-tbody"></tbody></table>
+        <div id="clients-empty" class="empty-state" style="display:none"><div class="empty-icon">👤</div><h3>No clients found</h3><p>Add your first client or adjust filters.</p></div>
+      </div>
+    </div>
 
-      <!-- Spec table -->
-      <div class="spec-heading" data-lang="tc">產品規格</div>
-      <div class="spec-heading" data-lang="en">Specifications</div>
+    <!-- LEADS -->
+    <div class="view" id="view-leads">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Leads</span></div>
+        <table><thead><tr><th>Name</th><th>Phone</th><th>Objectives</th><th>Coverage Interests</th><th>Notes</th><th>Actions</th></tr></thead>
+        <tbody id="leads-tbody"></tbody></table>
+        <div id="leads-empty" class="empty-state" style="display:none"><div class="empty-icon">⭐</div><h3>No leads yet</h3><p>Add a client and set their status to Lead.</p></div>
+      </div>
+    </div>
 
-      <table class="spec-table">
-        <tr>
-          <td><span data-lang="tc">控制方式</span><span data-lang="en">Control</span></td>
-          <td><span data-lang="tc">遙控器控制</span><span data-lang="en">Remote Control</span></td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">時間控制</span><span data-lang="en">Timer</span></td>
-          <td><span data-lang="tc">5–30 分鐘自由設定</span><span data-lang="en">5–30 minutes, freely adjustable</span></td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">檔位調節</span><span data-lang="en">Intensity</span></td>
-          <td><span data-lang="tc">1～10 檔，強度可調整</span><span data-lang="en">1–10 levels, adjustable intensity</span></td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">振動幅度</span><span data-lang="en">Amplitude</span></td>
-          <td><span data-lang="tc">約 3 mm 垂直律動</span><span data-lang="en">Approx. 3 mm vertical vibration</span></td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">振動頻率</span><span data-lang="en">Frequency</span></td>
-          <td><span data-lang="tc">約 3–12 Hz</span><span data-lang="en">Approx. 3–12 Hz</span></td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">額定功率</span><span data-lang="en">Power</span></td>
-          <td><span data-lang="tc">約 300 W</span><span data-lang="en">Approx. 300 W</span></td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">電源輸入</span><span data-lang="en">Voltage</span></td>
-          <td>AC 220V</td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">最大載重</span><span data-lang="en">Capacity</span></td>
-          <td>Max. 120 kg</td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">產品淨重</span><span data-lang="en">Weight</span></td>
-          <td><span data-lang="tc">約 30.5 kg</span><span data-lang="en">Approx. 30.5 kg</span></td>
-        </tr>
-        <tr>
-          <td><span data-lang="tc">產品尺寸</span><span data-lang="en">Dimensions</span></td>
-          <td>L 609 × W 429 × H 175 mm</td>
-        </tr>
-      </table>
+    <!-- POLICIES -->
+    <div class="view" id="view-policies">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Active Policies</span></div>
+        <table><thead><tr><th>Client</th><th>Coverage</th><th>Insurer</th><th>Policy #</th><th>Premium / yr</th><th>Expiry</th><th>Actions</th></tr></thead>
+        <tbody id="policies-tbody"></tbody></table>
+        <div id="policies-empty" class="empty-state" style="display:none"><div class="empty-icon">📋</div><h3>No active policies</h3><p>Policies appear when clients have Active status.</p></div>
+      </div>
+    </div>
 
-      <p class="prod-note">
-        <span data-lang="tc">規格如有更改，恕不另行通知。詳細資訊請聯絡我們的健康顧問。</span>
-        <span data-lang="en">Specifications subject to change without notice. Please contact our wellness team for the latest details.</span>
-      </p>
+    <!-- RENEWALS -->
+    <div class="view" id="view-renewals">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Upcoming Renewals (90 days)</span></div>
+        <table><thead><tr><th>Client</th><th>Coverage</th><th>Insurer</th><th>Expiry Date</th><th>Days Left</th><th>Actions</th></tr></thead>
+        <tbody id="renewals-tbody"></tbody></table>
+        <div id="renewals-empty" class="empty-state" style="display:none"><div class="empty-icon">🔄</div><h3>No renewals due</h3><p>Clients with policies expiring within 90 days appear here.</p></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="view" id="view-profile">
+      <button class="back-btn" onclick="navigate('customers')">&#8592; Back to Clients</button>
+      <div id="profile-content"></div>
     </div>
 
   </div>
-</section>
+</div>
 
-<!-- divider -->
-<div class="sec-divider"><div class="div-line"></div><div class="div-mark">✦</div><div class="div-line"></div></div>
+<!-- ══════════════════════════════════════════
+     ADD / EDIT CLIENT MODAL  (Tabbed FNA Form)
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="client-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Add New Client</span>
+      <button class="modal-close" onclick="closeModal()">&#215;</button>
+    </div>
 
-<!-- ══════════════════════════════════════
-     BENEFITS
-══════════════════════════════════════ -->
-<section class="benefits" id="benefits">
-  <div class="sec-label" data-lang="tc">健康功效</div>
-  <div class="sec-label" data-lang="en">Health Benefits</div>
-  <h2 class="sec-title">
-    <span data-lang="tc">為五十歲後的您<br>重新感受生活</span>
-    <span data-lang="en">Designed for a life well-lived</span>
-  </h2>
-  <div class="benefits-grid">
-    <div class="benefit-card fade-in">
-      <div class="benefit-num">01</div>
-      <h3 class="benefit-title"><span data-lang="tc">強化骨骼</span><span data-lang="en">Bone Density</span></h3>
-      <p class="benefit-desc"><span data-lang="tc">溫和的垂直振動可輕柔刺激骨骼細胞，有助維持骨密度，對五十歲後自然骨質流失特別有幫助。</span><span data-lang="en">Gentle vertical vibration stimulates bone cells, helping maintain density — especially valuable after 50 when natural bone loss begins.</span></p>
-    </div>
-    <div class="benefit-card fade-in">
-      <div class="benefit-num">02</div>
-      <h3 class="benefit-title"><span data-lang="tc">喚醒肌肉</span><span data-lang="en">Muscle Activation</span></h3>
-      <p class="benefit-desc"><span data-lang="tc">即使輕柔使用，也能有效激活深層肌肉，改善身體平衡，讓您的步伐更加穩健。</span><span data-lang="en">Even gentle use activates deep muscle groups, improving balance and stability so you move with greater confidence each day.</span></p>
-    </div>
-    <div class="benefit-card fade-in">
-      <div class="benefit-num">03</div>
-      <h3 class="benefit-title"><span data-lang="tc">促進循環</span><span data-lang="en">Better Circulation</span></h3>
-      <p class="benefit-desc"><span data-lang="tc">規律使用有助血液循環，紓緩腿部水腫，讓您每天都感到精神煥發、輕盈舒暢。</span><span data-lang="en">Regular use supports healthy circulation, eases leg swelling, and leaves you feeling refreshed and lighter throughout the day.</span></p>
-    </div>
-    <div class="benefit-card fade-in">
-      <div class="benefit-num">04</div>
-      <h3 class="benefit-title"><span data-lang="tc">放鬆舒壓</span><span data-lang="en">Stress Relief</span></h3>
-      <p class="benefit-desc"><span data-lang="tc">柔和的律動節奏有助安撫神經系統，減輕壓力，讓您享有更深沉、更恢復性的睡眠。</span><span data-lang="en">The gentle rhythm calms the nervous system, easing tension and supporting deeper, more restorative sleep.</span></p>
-    </div>
-    <div class="benefit-card fade-in">
-      <div class="benefit-num">05</div>
-      <h3 class="benefit-title"><span data-lang="tc">關節靈活</span><span data-lang="en">Joint Flexibility</span></h3>
-      <p class="benefit-desc"><span data-lang="tc">低衝擊的振動療法有助維持關節健康與靈活度，讓您日常活動更加自在輕鬆。</span><span data-lang="en">Low-impact vibration therapy supports joint health and flexibility, helping you move more freely and comfortably each day.</span></p>
-    </div>
-    <div class="benefit-card fade-in">
-      <div class="benefit-num">06</div>
-      <h3 class="benefit-title"><span data-lang="tc">日常舒適</span><span data-lang="en">Daily Comfort</span></h3>
-      <p class="benefit-desc"><span data-lang="tc">LiveSmart 設計優雅低調，融入您的家居空間，是您每日健康習慣中安靜而貼心的陪伴。</span><span data-lang="en">LiveSmart blends quietly into your home, becoming a gentle, unobtrusive part of your everyday wellness routine.</span></p>
+    <div class="modal-body">
+
+      <!-- TAB 1: PERSONAL -->
+      <div class="tab-pane active" id="tab-personal">
+        <div class="form-section">
+          <div class="form-section-title">Personal Information</div>
+          <div class="form-grid">
+            <div class="form-group"><label>First Name *</label><input type="text" id="f-first" required placeholder="John" /></div>
+            <div class="form-group"><label>Last Name *</label><input type="text" id="f-last" required placeholder="Smith" /></div>
+            <div class="form-group"><label>Date of Birth</label><input type="date" id="f-dob" /></div>
+            <div class="form-group"><label>Gender</label>
+              <select id="f-gender"><option value="">Select…</option><option>Male</option><option>Female</option><option>Non-binary</option><option>Prefer not to say</option></select>
+            </div>
+            <div class="form-group"><label>Marital Status</label>
+              <select id="f-marital"><option value="">Select…</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option><option>Others</option></select>
+            </div>
+            <div class="form-group"><label>National ID / SSN (last 4)</label><input type="text" id="f-ssn" maxlength="4" placeholder="XXXX" /></div>
+            <div class="form-group"><label>Education Level</label>
+              <select id="f-education">
+                <option value="">Select…</option>
+                <option>Primary 6 or below</option><option>Secondary</option><option>Matriculate / Post Secondary</option><option>University or above</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Life Insurance Experience</label>
+              <select id="f-ins-experience">
+                <option value="">Select…</option>
+                <option>Without any experience</option><option>Less than 5 years</option><option>5 years or above</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Contact Information</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Email *</label><input type="email" id="f-email" required placeholder="john@example.com" /></div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="f-phone" placeholder="+852 9xxx xxxx" /></div>
+            <div class="form-group form-full"><label>Residential Address</label><input type="text" id="f-address" placeholder="Flat, Floor, Block, Building, Street, District" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Health Information</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Smoker</label>
+              <select id="f-smoker"><option value="">Select…</option><option>No</option><option>Yes</option><option>Former smoker</option></select>
+            </div>
+            <div class="form-group"><label>Pre-existing Conditions</label><input type="text" id="f-conditions" placeholder="e.g. Diabetes, Hypertension" /></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: FINANCIAL -->
+      <div class="tab-pane" id="tab-financial">
+        <div class="form-section">
+          <div class="form-section-title">Employment</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Employer</label><input type="text" id="f-employer" placeholder="Company name" /></div>
+            <div class="form-group"><label>Occupation</label><input type="text" id="f-occupation" placeholder="e.g. Financial Analyst" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Q4a · Average Monthly Disposable Income (past 2 years)</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Monthly Disposable Income (HK$)</label><input type="number" id="f-monthly-income" placeholder="e.g. 30000" /></div>
+            <div class="form-group"><label>Income Range</label>
+              <select id="f-income-range">
+                <option value="">Select range…</option>
+                <option>Less than HK$10,000</option><option>HK$10,000 – HK$19,999</option>
+                <option>HK$20,000 – HK$49,999</option><option>HK$50,000 – HK$100,000</option><option>Over HK$100,000</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Q4b · Liquid Assets &amp; Liabilities</div>
+          <div class="form-grid col3">
+            <div class="form-group"><label>Total Liquid Assets [A] (HK$)</label><input type="number" id="f-liquid-assets" placeholder="0" oninput="calcNet()" /></div>
+            <div class="form-group"><label>Total Liabilities [B] (HK$)</label><input type="number" id="f-liabilities" placeholder="0" oninput="calcNet()" /></div>
+            <div class="form-group"><label>Net Amount [C = A − B] (HK$)</label><input type="number" id="f-net-amount" placeholder="Auto-calculated" readonly style="background:#f8f9fb;color:var(--text-muted)" /></div>
+          </div>
+          <div class="form-group" style="margin-top:12px"><label>Types of Liquid Assets</label>
+            <div class="checkbox-group">
+              <label class="checkbox-item"><input type="checkbox" name="liquid" value="Cash" /> Cash</label>
+              <label class="checkbox-item"><input type="checkbox" name="liquid" value="Bank accounts" /> Bank accounts</label>
+              <label class="checkbox-item"><input type="checkbox" name="liquid" value="Money market" /> Money market</label>
+              <label class="checkbox-item"><input type="checkbox" name="liquid" value="Stocks" /> Stocks</label>
+              <label class="checkbox-item"><input type="checkbox" name="liquid" value="Bonds / Mutual funds" /> Bonds / Mutual funds</label>
+              <label class="checkbox-item"><input type="checkbox" name="liquid" value="US Treasury bills" /> US Treasury bills</label>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:12px"><label>Types of Liabilities</label>
+            <div class="checkbox-group">
+              <label class="checkbox-item"><input type="checkbox" name="liab" value="Personal loans" /> Personal loans</label>
+              <label class="checkbox-item"><input type="checkbox" name="liab" value="Overdraft" /> Overdraft</label>
+              <label class="checkbox-item"><input type="checkbox" name="liab" value="Credit card loan" /> Credit card loan</label>
+              <label class="checkbox-item"><input type="checkbox" name="liab" value="Margin account" /> Margin account</label>
+              <label class="checkbox-item"><input type="checkbox" name="liab" value="Loan guarantees" /> Loan guarantees</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Q4c–4f · Premium Affordability</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Willing to pay premium for</label>
+              <select id="f-premium-period">
+                <option value="">Select…</option>
+                <option>2-5 years</option><option>6-10 years</option><option>11-15 years</option><option>16-20 years</option><option>More than 20 years</option><option>Whole of life</option><option>Single payment</option>
+              </select>
+            </div>
+            <div class="form-group"><label>% of monthly income for premium</label>
+              <select id="f-income-pct">
+                <option value="">Select…</option>
+                <option>&lt;10%</option><option>10% – 20%</option><option>21% – 30%</option><option>31% – 40%</option><option>41% – 50%</option><option>&gt;50%</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:12px"><label>Sources of Funds</label>
+            <div class="checkbox-group">
+              <label class="checkbox-item"><input type="checkbox" name="fundsrc" value="Salary" /> Salary</label>
+              <label class="checkbox-item"><input type="checkbox" name="fundsrc" value="Other income" /> Other income</label>
+              <label class="checkbox-item"><input type="checkbox" name="fundsrc" value="Investments" /> Investments</label>
+              <label class="checkbox-item"><input type="checkbox" name="fundsrc" value="Savings" /> Savings</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Q4h · Premium Financing</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Using premium financing?</label>
+              <select id="f-premium-financing" onchange="toggleFinancing()">
+                <option value="">Select…</option><option>No</option><option>Yes</option>
+              </select>
+            </div>
+          </div>
+          <div id="financing-details" style="display:none;margin-top:12px">
+            <div class="sub-field">
+              <div class="form-grid">
+                <div class="form-group"><label>Lender Name</label><input type="text" id="f-lender" placeholder="Bank / lender" /></div>
+                <div class="form-group"><label>Loan Principal (HK$)</label><input type="number" id="f-loan-principal" placeholder="0" /></div>
+                <div class="form-group"><label>Loan Interest Rate (% p.a.)</label><input type="number" id="f-loan-rate" placeholder="e.g. 3.5" step="0.01" /></div>
+                <div class="form-group"><label>Repayment Period (months)</label><input type="number" id="f-loan-months" placeholder="e.g. 12" /></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: FNA OBJECTIVES -->
+      <div class="tab-pane" id="tab-fna">
+        <div class="form-section">
+          <div class="form-section-title">Q1 · Insurance Objectives (tick one or more)</div>
+          <div class="form-group">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <label class="checkbox-item"><input type="checkbox" name="obj" value="a" /> a. Financial protection against adversities (death, accident, disability)</label>
+              <label class="checkbox-item"><input type="checkbox" name="obj" value="b" /> b. Preparation for health care needs (critical illness, hospitalization)</label>
+              <label class="checkbox-item"><input type="checkbox" name="obj" value="c" /> c. Providing regular income in the future (retirement income)</label>
+              <label class="checkbox-item"><input type="checkbox" name="obj" value="d" id="obj-d" onchange="toggleTargetSaving()" /> d. Saving up for the future (child education, retirement)</label>
+              <div id="target-saving-field" style="display:none;margin-left:22px">
+                <div class="sub-field">
+                  <div class="form-group"><label>Target Saving Amount (HK$)</label><input type="number" id="f-target-saving" placeholder="e.g. 500000" /></div>
+                </div>
+              </div>
+              <label class="checkbox-item"><input type="checkbox" name="obj" value="e" id="obj-e" onchange="toggleInvestment()" /> e. Investment</label>
+              <div id="investment-field" style="display:none;margin-left:22px">
+                <div class="sub-field">
+                  <div class="form-section-title" style="margin-bottom:10px">Q2 · Investment Management Preference</div>
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <label class="radio-item"><input type="radio" name="inv-pref" value="a" /> a. Self-directed, without professional advice</label>
+                    <label class="radio-item"><input type="radio" name="inv-pref" value="b" /> b. Self-directed, with professional advice</label>
+                    <label class="radio-item"><input type="radio" name="inv-pref" value="c" /> c. I do not want to manage investment choices</label>
+                  </div>
+                </div>
+              </div>
+              <label class="checkbox-item"><input type="checkbox" name="obj" value="f" id="obj-f" onchange="toggleObjOther()" /> f. Others</label>
+              <div id="obj-other-field" style="display:none;margin-left:22px">
+                <div class="sub-field">
+                  <div class="form-group"><label>Please specify</label><input type="text" id="f-obj-other" placeholder="Describe objective…" /></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Q3 · Target Benefit / Protection Period</div>
+          <div class="radio-group" style="flex-direction:column;gap:10px">
+            <label class="radio-item"><input type="radio" name="prot-period" value="< 1 year" /> Less than 1 year</label>
+            <label class="radio-item"><input type="radio" name="prot-period" value="1-5 years" /> 1–5 years</label>
+            <label class="radio-item"><input type="radio" name="prot-period" value="6-10 years" /> 6–10 years</label>
+            <label class="radio-item"><input type="radio" name="prot-period" value="11-15 years" /> 11–15 years</label>
+            <label class="radio-item"><input type="radio" name="prot-period" value="16-20 years" /> 16–20 years</label>
+            <label class="radio-item"><input type="radio" name="prot-period" value="> 20 years" /> More than 20 years</label>
+            <label class="radio-item"><input type="radio" name="prot-period" value="Whole of life" /> Whole of life</label>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Coverage Interests</div>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Auto" /> Auto</label>
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Home" /> Home</label>
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Life" /> Life</label>
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Health" /> Health</label>
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Business" /> Business</label>
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Travel" /> Travel</label>
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Disability" /> Disability</label>
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Critical Illness" /> Critical Illness</label>
+            <label class="checkbox-item"><input type="checkbox" name="coverage" value="Umbrella" /> Umbrella</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: PROTECTION NEEDS ANALYSIS -->
+      <div class="tab-pane" id="tab-protection">
+        <div class="form-section">
+          <div class="form-section-title">Life Protection — Shortfall Analysis</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Current Life Protection Shortfall (HK$)</label><input type="number" id="f-life-shortfall" placeholder="e.g. 500000" /></div>
+            <div class="form-group"><label>Total Sum Assured (HK$)</label><input type="number" id="f-sum-assured" placeholder="e.g. 1000000" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Other Life &amp; Risk Protection Needs</div>
+          <table class="needs-table">
+            <thead>
+              <tr>
+                <th style="width:36%">Coverage Type</th>
+                <th>Coverage Needed (HK$)</th>
+                <th>Existing Coverage (HK$)</th>
+                <th>Shortfall (HK$)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-label">Hospital Income (Daily)</td>
+                <td><input type="number" id="f-hosp-income-needed" placeholder="0" oninput="calcShortfall('hosp-income')" /></td>
+                <td><input type="number" id="f-hosp-income-existing" placeholder="0" oninput="calcShortfall('hosp-income')" /></td>
+                <td class="shortfall-cell"><input type="number" id="f-hosp-income-shortfall" placeholder="0" readonly /></td>
+              </tr>
+              <tr>
+                <td class="row-label">Hospitalization (Daily Room &amp; Board)</td>
+                <td><input type="number" id="f-hosp-room-needed" placeholder="0" oninput="calcShortfall('hosp-room')" /></td>
+                <td><input type="number" id="f-hosp-room-existing" placeholder="0" oninput="calcShortfall('hosp-room')" /></td>
+                <td class="shortfall-cell"><input type="number" id="f-hosp-room-shortfall" placeholder="0" readonly /></td>
+              </tr>
+              <tr>
+                <td class="row-label">Surgical Fees Benefit</td>
+                <td><input type="number" id="f-surgical-needed" placeholder="0" oninput="calcShortfall('surgical')" /></td>
+                <td><input type="number" id="f-surgical-existing" placeholder="0" oninput="calcShortfall('surgical')" /></td>
+                <td class="shortfall-cell"><input type="number" id="f-surgical-shortfall" placeholder="0" readonly /></td>
+              </tr>
+              <tr>
+                <td class="row-label">Critical Illness Insurance</td>
+                <td><input type="number" id="f-ci-needed" placeholder="0" oninput="calcShortfall('ci')" /></td>
+                <td><input type="number" id="f-ci-existing" placeholder="0" oninput="calcShortfall('ci')" /></td>
+                <td class="shortfall-cell"><input type="number" id="f-ci-shortfall" placeholder="0" readonly /></td>
+              </tr>
+              <tr>
+                <td class="row-label">Accidental Death &amp; Disability</td>
+                <td><input type="number" id="f-accident-needed" placeholder="0" oninput="calcShortfall('accident')" /></td>
+                <td><input type="number" id="f-accident-existing" placeholder="0" oninput="calcShortfall('accident')" /></td>
+                <td class="shortfall-cell"><input type="number" id="f-accident-shortfall" placeholder="0" readonly /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 5: RETIREMENT & EDUCATION -->
+      <div class="tab-pane" id="tab-retirement">
+        <div class="form-section">
+          <div class="form-section-title">Retirement Planning</div>
+          <div class="form-grid col3">
+            <div class="form-group"><label>Years to Retirement</label><input type="number" id="f-years-retire" placeholder="e.g. 20" /></div>
+            <div class="form-group"><label>Expected Retirement Period (yrs)</label><input type="number" id="f-retire-period" placeholder="e.g. 25" /></div>
+            <div class="form-group"><label>Monthly Retirement Expenses PV (HK$)</label><input type="number" id="f-retire-expenses-pv" placeholder="e.g. 20000" /></div>
+            <div class="form-group"><label>Monthly Retirement Expenses FV (HK$)</label><input type="number" id="f-retire-expenses-fv" placeholder="e.g. 35000" /></div>
+            <div class="form-group"><label>Total Retirement Needs (A) (HK$)</label><input type="number" id="f-retire-needs" placeholder="e.g. 5000000" /></div>
+            <div class="form-group"><label>Projected MPF/ORSO at Retirement (B) (HK$)</label><input type="number" id="f-mpf-projected" placeholder="e.g. 1200000" /></div>
+            <div class="form-group"><label>Other Retirement Savings (C) (HK$)</label><input type="number" id="f-retire-other-savings" placeholder="e.g. 500000" /></div>
+            <div class="form-group"><label>Retirement Shortfall (A−B−C) (HK$)</label><input type="number" id="f-retire-shortfall" placeholder="Auto or manual" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Children Education Fund</div>
+          <div id="children-list"></div>
+          <button type="button" class="btn btn-secondary btn-sm" style="margin-top:10px" onclick="addChild()">+ Add Child</button>
+        </div>
+      </div>
+
+      <!-- TAB 6: POLICY & STATUS -->
+      <div class="tab-pane" id="tab-policy">
+        <div class="form-section">
+          <div class="form-section-title">Policy Details</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Insurer / Carrier</label><input type="text" id="f-insurer" placeholder="e.g. Sun Life, Manulife" /></div>
+            <div class="form-group"><label>Policy Number</label><input type="text" id="f-policy-num" placeholder="POL-XXXXXX" /></div>
+            <div class="form-group"><label>Annual Premium (HK$)</label><input type="number" id="f-premium" placeholder="12000" /></div>
+            <div class="form-group"><label>Policy Expiry Date</label><input type="date" id="f-expiry" /></div>
+            <div class="form-group"><label>Beneficiary Name</label><input type="text" id="f-beneficiary" placeholder="Jane Smith" /></div>
+            <div class="form-group"><label>Beneficiary Relationship</label><input type="text" id="f-bene-rel" placeholder="Spouse" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">CRM Status &amp; Notes</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Client Status</label>
+              <select id="f-status"><option>Active</option><option>Pending</option><option>Inactive</option><option>Lead</option></select>
+            </div>
+            <div class="form-group"><label>Assigned Consultant</label><input type="text" id="f-broker" placeholder="Consultant name / code" /></div>
+            <div class="form-group form-full"><label>Broker Notes</label><textarea id="f-notes" placeholder="Internal notes…"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /modal-body -->
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveClient()">Save Client</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ══════════════════════════════════════
-     HOW IT WORKS
-══════════════════════════════════════ -->
-<section class="how-it-works" id="how">
-  <div class="hiw-left">
-    <div class="sec-label" data-lang="tc">使用方式</div>
-    <div class="sec-label" data-lang="en">How It Works</div>
-    <h2 class="sec-title">
-      <span data-lang="tc">簡單、安靜，<br>從容地照顧自己</span>
-      <span data-lang="en">Simple. Quiet.<br>Gently effective.</span>
-    </h2>
-    <div class="hiw-step fade-in">
-      <div class="hiw-num">一</div>
-      <div class="hiw-content">
-        <h3><span data-lang="tc">放在您喜歡的角落</span><span data-lang="en">Place it where you feel at home</span></h3>
-        <p><span data-lang="tc">無需安裝，低矮輕巧的設計可輕鬆放於客廳、臥室或書房，自然融入您的生活空間。</span><span data-lang="en">No installation needed. Its low, elegant profile fits naturally in any room — beside the sofa, in the bedroom, wherever feels right.</span></p>
-      </div>
-    </div>
-    <div class="hiw-step fade-in">
-      <div class="hiw-num">二</div>
-      <div class="hiw-content">
-        <h3><span data-lang="tc">選擇您的舒適模式</span><span data-lang="en">Choose your comfort setting</span></h3>
-        <p><span data-lang="tc">多種溫和程式專為成熟用戶設計，操作直觀簡便，無需任何技術知識。</span><span data-lang="en">Multiple gentle programmes designed for mature adults. Intuitive to use — no technical knowledge needed at all.</span></p>
-      </div>
-    </div>
-    <div class="hiw-step fade-in">
-      <div class="hiw-num">三</div>
-      <div class="hiw-content">
-        <h3><span data-lang="tc">放鬆，讓身體慢慢恢復</span><span data-lang="en">Relax as your body restores</span></h3>
-        <p><span data-lang="tc">每天只需十到十五分鐘，坐著或站著皆可，LiveSmart 靜靜為您的身體健康默默守護。</span><span data-lang="en">Just ten to fifteen minutes a day. Sit, stand, or rest — LiveSmart works quietly while you simply take a moment for yourself.</span></p>
-      </div>
+<!-- CONFIRM -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3 id="confirm-title">Delete Client?</h3>
+    <p id="confirm-msg">This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok-btn">Delete</button>
     </div>
   </div>
-  <div class="hiw-right">
-    <div class="stat-box fade-in">
-      <div class="stat-num">10 分鐘</div>
-      <div class="stat-label"><span data-lang="tc">初學者每日建議時間</span><span data-lang="en">Recommended daily start for beginners</span></div>
-    </div>
-    <div class="stat-box fade-in">
-      <div class="stat-num">≈ 0 dB</div>
-      <div class="stat-label"><span data-lang="tc">近乎無聲，不打擾家人</span><span data-lang="en">Near-silent — peaceful for everyone at home</span></div>
-    </div>
-    <div class="stat-box fade-in">
-      <div class="stat-num">50+</div>
-      <div class="stat-label"><span data-lang="tc">全球五十個以上國家的用戶</span><span data-lang="en">Countries with satisfied users worldwide</span></div>
-    </div>
-    <div class="stat-box fade-in">
-      <div class="stat-num">3–50Hz</div>
-      <div class="stat-label"><span data-lang="tc">可調振動頻率，按需而設</span><span data-lang="en">Adjustable frequency range for every need</span></div>
-    </div>
-  </div>
-</section>
+</div>
 
-<!-- ══════════════════════════════════════
-     PHILOSOPHY
-══════════════════════════════════════ -->
-<section class="philosophy">
-  <div class="philosophy-inner">
-    <div class="sec-label" style="margin-bottom:28px">
-      <span data-lang="tc">我們的理念</span>
-      <span data-lang="en">Our Philosophy</span>
-    </div>
-    <blockquote>
-      <span data-lang="tc">「健康不是終點，而是每一天溫柔的自我照顧。」</span>
-      <span data-lang="en">"Health is not a destination — it is the quiet care we give ourselves each day."</span>
-    </blockquote>
-    <div class="philosophy-attr">LiveSmart · 生活智慧</div>
-  </div>
-</section>
+<div id="toast-container"></div>
 
-<!-- ══════════════════════════════════════
-     FEATURES
-══════════════════════════════════════ -->
-<section class="features" id="features">
-  <div class="features-grid">
-    <div class="features-sticky">
-      <div class="sec-label" data-lang="tc">產品特點</div>
-      <div class="sec-label" data-lang="en">Product Features</div>
-      <h2 class="sec-title">
-        <span data-lang="tc">每個細節，<br>都為您而想</span>
-        <span data-lang="en">Every detail,<br>considered for you</span>
-      </h2>
-      <p>
-        <span data-lang="tc">從靈感源自日本工藝的紋理頂面，到近乎無聲的靜音馬達，LiveSmart 的設計初衷，是讓您在家中也能感到被好好照顧。</span>
-        <span data-lang="en">From the textile-inspired top surface to the whisper-quiet motor, LiveSmart is designed so you feel genuinely cared for — right at home.</span>
-      </p>
-    </div>
-    <div class="feature-list">
-      <div class="feature-item fade-in">
-        <div class="feature-dot"></div>
-        <div class="feature-text">
-          <h4><span data-lang="tc">日式織物紋理頂面</span><span data-lang="en">Textile-Inspired Surface</span></h4>
-          <p><span data-lang="tc">頂面設計靈感源自日本傳統織物工藝，既防滑實用，亦為居家空間增添優雅氣息。</span><span data-lang="en">Inspired by Japanese ori-mono weaving, the textured top is both non-slip and a beautiful addition to any living space.</span></p>
-        </div>
-      </div>
-      <div class="feature-item fade-in">
-        <div class="feature-dot"></div>
-        <div class="feature-text">
-          <h4><span data-lang="tc">超靜音馬達</span><span data-lang="en">Ultra-Silent Motor</span></h4>
-          <p><span data-lang="tc">近乎無聲的設計，讓您看電視、閱讀或清晨使用時，完全不打擾家人的寧靜。</span><span data-lang="en">Near-silent operation means you can use it while watching TV, reading, or in the early morning without disturbing anyone.</span></p>
-        </div>
-      </div>
-      <div class="feature-item fade-in">
-        <div class="feature-dot"></div>
-        <div class="feature-text">
-          <h4><span data-lang="tc">低矮輕巧，融入家居</span><span data-lang="en">Discreet, Furniture-Friendly Form</span></h4>
-          <p><span data-lang="tc">低矮的輪廓可輕鬆放於沙發旁或桌底，純白機身搭配啞光黑頂，與各種室內風格相配。</span><span data-lang="en">The low profile fits beside sofas or under tables. Pure white body and matte top complement any interior style gracefully.</span></p>
-        </div>
-      </div>
-      <div class="feature-item fade-in">
-        <div class="feature-dot"></div>
-        <div class="feature-text">
-          <h4><span data-lang="tc">寬闊穩固的站立台面</span><span data-lang="en">Generous, Stable Platform</span></h4>
-          <p><span data-lang="tc">寬大的台面提供充足站立空間，讓您使用時充滿安全感，尤其適合初次接觸振動健康的朋友。</span><span data-lang="en">The wide surface gives ample space and stability, offering the confidence and security that first-time users especially appreciate.</span></p>
-        </div>
-      </div>
-      <div class="feature-item fade-in">
-        <div class="feature-dot"></div>
-        <div class="feature-text">
-          <h4><span data-lang="tc">多種溫和振動模式</span><span data-lang="en">Multiple Gentle Programmes</span></h4>
-          <p><span data-lang="tc">多款預設程式涵蓋放鬆、循環改善、肌肉活化等需求，按您的節奏慢慢探索。</span><span data-lang="en">Pre-set programmes cover relaxation, circulation, muscle activation and more. Explore them at your own pace, in your own time.</span></p>
-        </div>
-      </div>
-      <div class="feature-item fade-in">
-        <div class="feature-dot"></div>
-        <div class="feature-text">
-          <h4><span data-lang="tc">安全設計，讓您安心</span><span data-lang="en">Safety Built Right In</span></h4>
-          <p><span data-lang="tc">內置安全停止功能、防滑橡膠腳墊及低重心設計，讓各種行動能力的用戶都能安心使用。</span><span data-lang="en">Built-in safety stops, non-slip feet, and a low centre of gravity mean users of all mobility levels can feel completely at ease.</span></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<script>
+// ── STORAGE ───────────────────────────────────────────────────
+const STORAGE_KEY = 'broker_crm_v2';
+let clients = [];
+let editingId = null;
+let childCount = 0;
 
-<!-- ══════════════════════════════════════
-     TESTIMONIALS
-══════════════════════════════════════ -->
-<section class="testimonials">
-  <div class="sec-label" data-lang="tc">用戶心聲</div>
-  <div class="sec-label" data-lang="en">Customer Voices</div>
-  <h2 class="sec-title">
-    <span data-lang="tc">他們的真實體驗</span>
-    <span data-lang="en">Real stories, real people</span>
-  </h2>
-  <div class="testi-grid">
-    <div class="testi-card fade-in">
-      <p class="testi-text"><span data-lang="tc">用了三個星期，腳感覺輕了很多，睡眠也改善了。放在客廳就像一件家具，朋友來訪都會問這是什麼。</span><span data-lang="en">After three weeks, my legs feel noticeably lighter and I am sleeping so much better. It sits in my living room like a piece of furniture — friends always ask what it is.</span></p>
-      <div class="testi-author">
-        <div class="testi-avatar">🌸</div>
-        <div>
-          <div class="testi-name"><span data-lang="tc">陳美玲，63歲</span><span data-lang="en">Margaret T., 63</span></div>
-          <div class="testi-role"><span data-lang="tc">退休教師・香港</span><span data-lang="en">Retired Teacher · Hong Kong</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="testi-card fade-in">
-      <p class="testi-text"><span data-lang="tc">醫生建議我做溫和運動改善血液循環，LiveSmart 成了我每天早上的小習慣，輕鬆，而且真的很期待那十幾分鐘。</span><span data-lang="en">My doctor suggested gentle exercise for my circulation. LiveSmart has become a small morning ritual I genuinely look forward to each day.</span></p>
-      <div class="testi-author">
-        <div class="testi-avatar">🍃</div>
-        <div>
-          <div class="testi-name"><span data-lang="tc">林建國，71歲</span><span data-lang="en">Robert K., 71</span></div>
-          <div class="testi-role"><span data-lang="tc">退休工程師・台北</span><span data-lang="en">Retired Engineer · Taipei</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="testi-card fade-in">
-      <p class="testi-text"><span data-lang="tc">靜音設計真的太好了，看晚間節目時使用，先生完全沒察覺。外形很美，完全不像運動器材。</span><span data-lang="en">The silent motor is everything. I use it during the evening news and my husband does not even notice. The design is beautiful — nothing like fitness equipment.</span></p>
-      <div class="testi-author">
-        <div class="testi-avatar">☁️</div>
-        <div>
-          <div class="testi-name"><span data-lang="tc">黃淑芬，58歲</span><span data-lang="en">Susan W., 58</span></div>
-          <div class="testi-role"><span data-lang="tc">企業主・新加坡</span><span data-lang="en">Business Owner · Singapore</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="testi-card fade-in">
-      <p class="testi-text"><span data-lang="tc">膝蓋困擾我多年，用了之後早上的僵硬感明顯減少了很多。終於找到一樣真正為我這個年紀設計的東西。</span><span data-lang="en">My knee has troubled me for years. The gentle vibration has noticeably reduced morning stiffness. I feel this was made for someone exactly my age.</span></p>
-      <div class="testi-author">
-        <div class="testi-avatar">🌿</div>
-        <div>
-          <div class="testi-name"><span data-lang="tc">劉國強，66歲</span><span data-lang="en">George L., 66</span></div>
-          <div class="testi-role"><span data-lang="tc">前大學教授・高雄</span><span data-lang="en">Former Professor · Kaohsiung</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+const AVATAR_COLORS = ['#3b6ef8','#e74c3c','#27ae60','#f39c12','#8e44ad','#16a085','#2980b9','#d35400'];
+function avatarColor(n) { let h=0; for(let c of n) h=(h*31+c.charCodeAt(0))&0xffffffff; return AVATAR_COLORS[Math.abs(h)%AVATAR_COLORS.length]; }
+function initials(f,l) { return ((f[0]||'')+(l[0]||'')).toUpperCase(); }
+function fmtDate(d) { if(!d) return '—'; const [y,m,day]=d.split('-'); return `${m}/${day}/${y}`; }
+function fmtHKD(v) { if(!v && v!==0) return '—'; return 'HK$'+Number(v).toLocaleString(); }
+function daysUntil(d) { if(!d) return null; return Math.ceil((new Date(d)-new Date())/86400000); }
+function age(dob) { if(!dob) return null; const d=new Date(dob),t=new Date(); let a=t.getFullYear()-d.getFullYear(); if(t<new Date(t.getFullYear(),d.getMonth(),d.getDate())) a--; return a; }
+function uid() { return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function load() { try { clients=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); } catch { clients=[]; } }
+function save() { localStorage.setItem(STORAGE_KEY,JSON.stringify(clients)); }
 
-<!-- ══════════════════════════════════════
-     CTA  (gentle, inviting, not pushy)
-══════════════════════════════════════ -->
-<section class="cta-section" id="contact">
-  <div class="cta-inner">
-    <div class="sec-label" data-lang="tc">與我們聯繫</div>
-    <div class="sec-label" data-lang="en">Get in Touch</div>
-    <h2 class="cta-title">
-      <span data-lang="tc">有任何問題，<br>我們很樂意聊聊</span>
-      <span data-lang="en">Curious? We would love<br>to have a conversation.</span>
-    </h2>
-    <p class="cta-sub">
-      <span data-lang="tc">無需任何承諾，我們的健康顧問可以根據您的需要，分享 LiveSmart 如何融入您的日常生活。</span>
-      <span data-lang="en">No pressure, no commitment. Our wellness team is happy to share how LiveSmart might fit into your daily life.</span>
-    </p>
-    <div class="cta-btns">
-      <a class="btn-primary" href="/cdn-cgi/l/email-protection#fd9598919192bd91948b988e909c8f89d39e9290">
-        <span data-lang="tc">發送電郵給我們</span>
-        <span data-lang="en">Send Us a Message</span>
-        <span class="arr">→</span>
-      </a>
-      <a class="btn-outline" href="tel:+85212345678">
-        <span data-lang="tc">致電我們</span>
-        <span data-lang="en">Call Us</span>
-      </a>
-    </div>
-  </div>
-</section>
+// ── NAVIGATION ────────────────────────────────────────────────
+const TITLES = { dashboard:'Dashboard', customers:'Clients', leads:'Leads', policies:'Policies', renewals:'Renewals', profile:'Client Profile' };
+function navigate(view, id) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  const el = document.getElementById('view-'+view);
+  if(el) el.classList.add('active');
+  const lnk = document.querySelector(`nav a[data-view="${view}"]`);
+  if(lnk) lnk.classList.add('active');
+  document.getElementById('header-title').textContent = TITLES[view]||view;
+  document.getElementById('header-add-btn').style.display = view==='profile' ? 'none' : '';
+  if(view==='dashboard') renderDashboard();
+  else if(view==='customers') renderClients();
+  else if(view==='leads') renderLeads();
+  else if(view==='policies') renderPolicies();
+  else if(view==='renewals') renderRenewals();
+  else if(view==='profile'&&id) renderProfile(id);
+}
+document.querySelectorAll('nav a[data-view]').forEach(a=>a.addEventListener('click',()=>navigate(a.dataset.view)));
 
-<!-- ══════════════════════════════════════
-     FOOTER
-══════════════════════════════════════ -->
-<footer>
-  <div class="footer-logo-wrap">
-    <svg width="28" height="28" viewBox="0 0 69 58" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.55">
-      <rect x="0"  y="36" width="10" height="14" rx="5" fill="#C8B48E" opacity="0.45"/>
-      <rect x="14" y="22" width="10" height="28" rx="5" fill="#C8B48E" opacity="0.7"/>
-      <rect x="28" y="0"  width="10" height="50" rx="5" fill="#C8B48E"/>
-      <rect x="42" y="22" width="10" height="28" rx="5" fill="#C8B48E" opacity="0.7"/>
-      <rect x="56" y="36" width="10" height="14" rx="5" fill="#C8B48E" opacity="0.45"/>
-    </svg>
-    <div>
-      <div class="footer-logo-en">Live<span>Smart</span></div>
-      <div class="footer-logo-tc">生活智慧</div>
-    </div>
-  </div>
-  <div class="footer-links">
-    <a href="#" data-lang="tc">私隱政策</a>
-    <a href="#" data-lang="en">Privacy Policy</a>
-    <a href="#" data-lang="tc">使用條款</a>
-    <a href="#" data-lang="en">Terms of Use</a>
-    <a href="#contact" data-lang="tc">聯絡我們</a>
-    <a href="#contact" data-lang="en">Contact</a>
-  </div>
-  <div class="footer-copy">© 2025 LiveSmart · 版權所有</div>
-</footer>
+// ── BADGE HELPERS ─────────────────────────────────────────────
+function statusBadge(s) {
+  const m={Active:'badge-active',Pending:'badge-pending',Inactive:'badge-inactive',Lead:'badge-lead'};
+  return `<span class="badge ${m[s]||''}">${s}</span>`;
+}
+const OBJ_LABELS = { a:'Financial Protection', b:'Health Care', c:'Regular Income', d:'Savings', e:'Investment', f:'Others' };
 
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ── PRODUCT GALLERY ── */
-function switchImg(thumb, url) {
-  document.getElementById('mainImg').src = url;
-  document.querySelectorAll('.prod-thumb').forEach(t => t.classList.remove('active'));
-  thumb.classList.add('active');
+// ── DYNAMIC FORM HELPERS ──────────────────────────────────────
+function calcNet() {
+  const a = parseFloat(document.getElementById('f-liquid-assets').value)||0;
+  const b = parseFloat(document.getElementById('f-liabilities').value)||0;
+  document.getElementById('f-net-amount').value = a-b;
+}
+function calcShortfall(key) {
+  const needed = parseFloat(document.getElementById(`f-${key}-needed`).value)||0;
+  const exist  = parseFloat(document.getElementById(`f-${key}-existing`).value)||0;
+  const sf = Math.max(0, needed-exist);
+  document.getElementById(`f-${key}-shortfall`).value = sf || '';
+}
+function toggleTargetSaving() {
+  document.getElementById('target-saving-field').style.display = document.getElementById('obj-d').checked ? '' : 'none';
+}
+function toggleInvestment() {
+  document.getElementById('investment-field').style.display = document.getElementById('obj-e').checked ? '' : 'none';
+}
+function toggleObjOther() {
+  document.getElementById('obj-other-field').style.display = document.getElementById('obj-f').checked ? '' : 'none';
+}
+function toggleFinancing() {
+  document.getElementById('financing-details').style.display = document.getElementById('f-premium-financing').value==='Yes' ? '' : 'none';
 }
 
-/* ── LANGUAGE TOGGLE ── */
-function setLang(lang) {
-  document.documentElement.setAttribute('lang', lang);
-  document.body.setAttribute('lang', lang);
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
-
-  document.querySelectorAll('[data-lang]').forEach(el => {
-    const show = el.getAttribute('data-lang') === lang;
-    // respect inline vs block
-    if (el.tagName === 'SPAN' || el.tagName === 'A') {
-      el.style.display = show ? 'inline' : 'none';
-    } else {
-      el.style.display = show ? '' : 'none';
-    }
-  });
+// Children rows
+function addChild(data) {
+  const idx = childCount++;
+  const container = document.getElementById('children-list');
+  const div = document.createElement('div');
+  div.className = 'sub-field';
+  div.id = `child-${idx}`;
+  div.style.marginBottom = '12px';
+  div.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="font-size:13px">Child ${idx+1}</strong>
+      <button type="button" class="btn-icon btn-sm" onclick="document.getElementById('child-${idx}').remove()">✕</button>
+    </div>
+    <div class="form-grid col3">
+      <div class="form-group"><label>Child's Name</label><input type="text" name="child-name-${idx}" placeholder="Name" value="${data?.name||''}" /></div>
+      <div class="form-group"><label>Age</label><input type="number" name="child-age-${idx}" placeholder="e.g. 8" value="${data?.age||''}" /></div>
+      <div class="form-group"><label>Country of Study</label><input type="text" name="child-country-${idx}" placeholder="e.g. UK" value="${data?.country||''}" /></div>
+      <div class="form-group"><label>Savings Period (yrs)</label><input type="number" name="child-savings-${idx}" placeholder="e.g. 10" value="${data?.savingsPeriod||''}" /></div>
+      <div class="form-group"><label>Education Fund Needed FV (HK$)</label><input type="number" name="child-needed-${idx}" placeholder="0" value="${data?.fundNeeded||''}" /></div>
+      <div class="form-group"><label>Education Fund Reserved FV (HK$)</label><input type="number" name="child-reserved-${idx}" placeholder="0" value="${data?.fundReserved||''}" /></div>
+    </div>`;
+  container.appendChild(div);
 }
-// Default: Traditional Chinese
-setLang('tc');
-
-/* ── FADE-IN ON SCROLL ── */
-const io = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+function collectChildren() {
+  const children = [];
+  document.querySelectorAll('#children-list .sub-field').forEach((div,i) => {
+    const idx = div.id.replace('child-','');
+    const name = div.querySelector(`[name="child-name-${idx}"]`)?.value;
+    if (!name) return;
+    children.push({
+      name,
+      age: div.querySelector(`[name="child-age-${idx}"]`)?.value||'',
+      country: div.querySelector(`[name="child-country-${idx}"]`)?.value||'',
+      savingsPeriod: div.querySelector(`[name="child-savings-${idx}"]`)?.value||'',
+      fundNeeded: div.querySelector(`[name="child-needed-${idx}"]`)?.value||'',
+      fundReserved: div.querySelector(`[name="child-reserved-${idx}"]`)?.value||'',
+    });
   });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+  return children;
+}
+function populateChildren(children) {
+  document.getElementById('children-list').innerHTML = '';
+  childCount = 0;
+  (children||[]).forEach(c => addChild(c));
+}
 
-/* ── SMOOTH NAV ── */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
-  });
-});
-
-/* ── AI IMAGE GENERATION ── */
-const IMGS = [
-  {
-    id: 'heroImg', shimmer: 'heroShimmer', isHero: true,
-    prompt: `Lifestyle product photography: a sleek modern whole-body wellness vibration platform device in a serene minimalist Japanese living room. The device is low-profile rectangular, pure white sides, matte dark geometric woven-textured top. Positioned elegantly on a pale natural wood floor beside a linen-upholstered Japanese sofa. Soft morning light filters through shoji screens. Ceramic vase with a single white orchid. No text. Photorealistic, warm ivory and charcoal tones, 8K.`
-  },
-  {
-    id: 'lf0', capTc: '家居靜謐', capEn: 'Quiet Moments',
-    prompt: `A graceful silver-haired Asian woman in her early 60s wearing a soft ivory linen robe, eyes gently closed, standing peacefully in a sunlit minimalist Japanese living room. Warm morning light through shoji screens. Natural wood floors. Calm, meditative atmosphere. Cinematic portrait, warm tones, shallow depth of field. No text.`
-  },
-  {
-    id: 'lf1', capTc: '輕柔律動', capEn: 'Gentle Motion',
-    prompt: `Close-up macro photo of elegant aged Asian hands resting peacefully on a matte dark geometric woven-textured surface. Soft golden side light catches the pattern details. White linen sleeve visible at wrist. Very shallow depth of field. Japanese minimalist aesthetic. Warm, serene mood. Photorealistic, high detail. No text.`
-  },
-  {
-    id: 'lf2', capTc: '和諧共處', capEn: 'Living in Harmony',
-    prompt: `Warm lifestyle scene: a content Asian couple in their late 50s sitting together in a bright modern Japanese-style apartment, sharing morning tea at a low wooden table. Clean white walls, natural wood furniture, lush green potted plants, warm golden morning light. Joyful peaceful family atmosphere. Cinematic photography. No text.`
+// ── DASHBOARD ─────────────────────────────────────────────────
+function renderDashboard() {
+  const total = clients.length;
+  const active = clients.filter(c=>c.status==='Active').length;
+  const leads = clients.filter(c=>c.status==='Lead').length;
+  const renewing = clients.filter(c=>{ const d=daysUntil(c.expiry); return d!==null&&d>=0&&d<=30; }).length;
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card blue"><div class="stat-label">Total Clients</div><div class="stat-value">${total}</div><div class="stat-sub">All records</div></div>
+    <div class="stat-card green"><div class="stat-label">Active</div><div class="stat-value">${active}</div><div class="stat-sub">With policies</div></div>
+    <div class="stat-card blue"><div class="stat-label">Leads</div><div class="stat-value">${leads}</div><div class="stat-sub">Prospects</div></div>
+    <div class="stat-card orange"><div class="stat-label">Renewing Soon</div><div class="stat-value">${renewing}</div><div class="stat-sub">Within 30 days</div></div>`;
+  const recent = [...clients].sort((a,b)=>b.createdAt-a.createdAt).slice(0,6);
+  const tbody = document.getElementById('recent-tbody');
+  if(!recent.length){
+    tbody.innerHTML=`<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">👤</div><h3>No clients yet</h3><p>Click "+ Add Client" to get started.</p></div></td></tr>`;
+    return;
   }
-];
-
-function makeSVG(cfg, i) {
-  const chars = ['和','静','健','暮'];
-  const c = chars[i % chars.length];
-  const pals = [['#12100c','#1c1710'],['#0c1214','#111c20'],['#100e08','#181610'],['#0e0c14','#161020']];
-  const [d, m] = pals[i % pals.length];
-  const cap = cfg.capTc || '';
-  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id="g${i}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:${d}"/>
-          <stop offset="50%" style="stop-color:${m}"/>
-          <stop offset="100%" style="stop-color:${d}"/>
-        </linearGradient>
-        <pattern id="pt${i}" width="44" height="44" patternUnits="userSpaceOnUse">
-          <path d="M44 0L0 0 0 44" fill="none" stroke="rgba(176,154,116,.05)" stroke-width=".5"/>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#g${i})"/>
-      <rect width="100%" height="100%" fill="url(#pt${i})"/>
-      <text x="450" y="320" font-family="serif" font-size="220" fill="rgba(176,154,116,.07)" text-anchor="middle" dominant-baseline="middle">${c}</text>
-      ${cap ? `<text x="450" y="492" font-family="serif" font-size="14" fill="rgba(176,154,116,.3)" text-anchor="middle" letter-spacing="8">${cap}</text><line x1="390" y1="510" x2="510" y2="510" stroke="rgba(176,154,116,.18)" stroke-width=".5"/>` : ''}
-    </svg>`);
+  tbody.innerHTML = recent.map(c=>`
+    <tr style="cursor:pointer" onclick="navigate('profile','${c.id}')">
+      <td><div class="name-cell"><div class="avatar" style="background:${avatarColor(c.first+c.last)}">${initials(c.first,c.last)}</div>
+        <div><div class="name">${c.first} ${c.last}</div><div class="email">${c.email}</div></div></div></td>
+      <td>${statusBadge(c.status)}</td>
+      <td>${(c.objectives||[]).map(o=>`<span class="badge badge-obj" style="margin:2px">${OBJ_LABELS[o]||o}</span>`).join('')||'—'}</td>
+      <td>${(c.coverage||[]).join(', ')||'—'}</td>
+      <td>${new Date(c.createdAt).toLocaleDateString()}</td>
+    </tr>`).join('');
 }
 
-async function loadImages() {
-  for (let i = 0; i < IMGS.length; i++) {
-    const cfg = IMGS[i];
-    let src = null;
+// ── CLIENTS LIST ──────────────────────────────────────────────
+function renderClients() {
+  const q = (document.getElementById('client-search')?.value||'').toLowerCase();
+  const sf = document.getElementById('status-filter')?.value||'';
+  let filtered = clients.filter(c=>{
+    const s = `${c.first} ${c.last} ${c.email} ${c.phone||''}`.toLowerCase();
+    return (!q||s.includes(q)) && (!sf||c.status===sf);
+  }).sort((a,b)=>b.createdAt-a.createdAt);
+  const tbody = document.getElementById('clients-tbody');
+  const empty = document.getElementById('clients-empty');
+  if(!filtered.length){ tbody.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  tbody.innerHTML = filtered.map(c=>`
+    <tr>
+      <td><div class="name-cell"><div class="avatar" style="background:${avatarColor(c.first+c.last)}">${initials(c.first,c.last)}</div>
+        <div><div class="name" style="cursor:pointer;color:var(--accent)" onclick="navigate('profile','${c.id}')">${c.first} ${c.last}</div><div class="email">${c.email}</div></div></div></td>
+      <td>${c.phone||'—'}</td>
+      <td>${statusBadge(c.status)}</td>
+      <td>${(c.coverage||[]).join(', ')||'—'}</td>
+      <td>${(c.objectives||[]).map(o=>`<span class="badge badge-obj">${OBJ_LABELS[o]||o}</span> `).join('')||'—'}</td>
+      <td><div class="actions-cell">
+        <button class="btn-icon" title="View" onclick="navigate('profile','${c.id}')">👁</button>
+        <button class="btn-icon" title="Edit" onclick="openEditModal('${c.id}')">✏️</button>
+        <button class="btn-icon" title="Delete" onclick="confirmDelete('${c.id}')">🗑</button>
+      </div></td>
+    </tr>`).join('');
+}
 
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: cfg.prompt }]
-        })
-      });
-      const data = await res.json();
-      const blk = data.content && data.content.find(b => b.type === 'image');
-      if (blk && blk.source && blk.source.data) {
-        src = `data:${blk.source.media_type};base64,${blk.source.data}`;
-      }
-    } catch {}
+// ── LEADS ─────────────────────────────────────────────────────
+function renderLeads() {
+  const leads = clients.filter(c=>c.status==='Lead').sort((a,b)=>b.createdAt-a.createdAt);
+  const tbody = document.getElementById('leads-tbody');
+  const empty = document.getElementById('leads-empty');
+  if(!leads.length){ tbody.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  tbody.innerHTML = leads.map(c=>`
+    <tr>
+      <td><div class="name-cell"><div class="avatar" style="background:${avatarColor(c.first+c.last)}">${initials(c.first,c.last)}</div>
+        <div><div class="name">${c.first} ${c.last}</div><div class="email">${c.email}</div></div></div></td>
+      <td>${c.phone||'—'}</td>
+      <td>${(c.objectives||[]).map(o=>`<span class="badge badge-obj">${OBJ_LABELS[o]||o}</span> `).join('')||'—'}</td>
+      <td>${(c.coverage||[]).join(', ')||'—'}</td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted)">${c.notes||'—'}</td>
+      <td><div class="actions-cell">
+        <button class="btn-icon" onclick="navigate('profile','${c.id}')">👁</button>
+        <button class="btn-icon" onclick="openEditModal('${c.id}')">✏️</button>
+        <button class="btn-icon" title="Convert to Pending" onclick="convertLead('${c.id}')">✅</button>
+      </div></td>
+    </tr>`).join('');
+}
+function convertLead(id) {
+  const c = clients.find(x=>x.id===id); if(!c) return;
+  c.status='Pending'; save(); renderLeads(); toast('Lead converted to Pending','success');
+}
 
-    if (!src) src = makeSVG(cfg, i);
+// ── POLICIES ──────────────────────────────────────────────────
+function renderPolicies() {
+  const active = clients.filter(c=>c.status==='Active'&&c.policyNum).sort((a,b)=>b.createdAt-a.createdAt);
+  const tbody = document.getElementById('policies-tbody');
+  const empty = document.getElementById('policies-empty');
+  if(!active.length){ tbody.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  tbody.innerHTML = active.map(c=>`
+    <tr>
+      <td><div class="name-cell"><div class="avatar" style="background:${avatarColor(c.first+c.last)}">${initials(c.first,c.last)}</div>
+        <div><div class="name">${c.first} ${c.last}</div></div></div></td>
+      <td>${(c.coverage||[]).join(', ')||'—'}</td>
+      <td>${c.insurer||'—'}</td>
+      <td>${c.policyNum||'—'}</td>
+      <td>${c.premium?'HK$'+Number(c.premium).toLocaleString():'—'}</td>
+      <td>${fmtDate(c.expiry)}</td>
+      <td><div class="actions-cell">
+        <button class="btn-icon" onclick="navigate('profile','${c.id}')">👁</button>
+        <button class="btn-icon" onclick="openEditModal('${c.id}')">✏️</button>
+      </div></td>
+    </tr>`).join('');
+}
 
-    const currentLang = document.body.getAttribute('lang') || 'tc';
+// ── RENEWALS ──────────────────────────────────────────────────
+function renderRenewals() {
+  const due = clients.filter(c=>{ const d=daysUntil(c.expiry); return d!==null&&d>=0&&d<=90; }).sort((a,b)=>new Date(a.expiry)-new Date(b.expiry));
+  const tbody = document.getElementById('renewals-tbody');
+  const empty = document.getElementById('renewals-empty');
+  if(!due.length){ tbody.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  tbody.innerHTML = due.map(c=>{
+    const d=daysUntil(c.expiry);
+    const urg = d<=7?'color:var(--danger);font-weight:700':d<=30?'color:var(--warning);font-weight:600':'';
+    return `<tr>
+      <td><div class="name-cell"><div class="avatar" style="background:${avatarColor(c.first+c.last)}">${initials(c.first,c.last)}</div>
+        <div><div class="name">${c.first} ${c.last}</div><div class="email">${c.email}</div></div></div></td>
+      <td>${(c.coverage||[]).join(', ')||'—'}</td>
+      <td>${c.insurer||'—'}</td>
+      <td>${fmtDate(c.expiry)}</td>
+      <td style="${urg}">${d} days</td>
+      <td><div class="actions-cell">
+        <button class="btn-icon" onclick="navigate('profile','${c.id}')">👁</button>
+        <button class="btn-icon" onclick="openEditModal('${c.id}')">✏️</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
 
-    if (cfg.isHero) {
-      const img = document.getElementById(cfg.id);
-      const shim = document.getElementById(cfg.shimmer);
-      if (img) {
-        img.src = src;
-        img.onload = () => { img.classList.add('loaded'); if (shim) shim.style.display = 'none'; };
-      }
-    } else {
-      const wrap = document.getElementById(cfg.id);
-      if (wrap) {
-        wrap.innerHTML = `
-          <img src="${src}" alt="${cfg.capTc}" style="width:100%;height:100%;object-fit:cover;min-height:300px;display:block;"/>
-          <div class="lf-cap">
-            <span data-lang="tc">${cfg.capTc}</span>
-            <span data-lang="en" style="display:none">${cfg.capEn}</span>
-          </div>`;
-        wrap.querySelectorAll('[data-lang]').forEach(el => {
-          el.style.display = el.getAttribute('data-lang') === currentLang ? 'inline' : 'none';
-        });
-      }
-    }
+// ── PROFILE ───────────────────────────────────────────────────
+function renderProfile(id) {
+  const c = clients.find(x=>x.id===id); if(!c){ navigate('customers'); return; }
+  const a = age(c.dob);
+  const objLabels = (c.objectives||[]).map(o=>OBJ_LABELS[o]||o).join(', ') || '—';
+
+  const invPrefLabel = { a:'Self-directed, no advice', b:'Self-directed, with advice', c:'No preference / managed' };
+
+  document.getElementById('profile-content').innerHTML = `
+    <div class="profile-header">
+      <div class="profile-avatar" style="background:${avatarColor(c.first+c.last)}">${initials(c.first,c.last)}</div>
+      <div style="flex:1">
+        <div class="profile-name">${c.first} ${c.last}</div>
+        <div class="profile-meta">${c.email}${c.phone?' · '+c.phone:''}${a?' · Age '+a:''}</div>
+        <div class="profile-badges">
+          ${statusBadge(c.status)}
+          ${(c.objectives||[]).map(o=>`<span class="badge badge-obj">${OBJ_LABELS[o]||o}</span>`).join('')}
+          ${(c.coverage||[]).map(cv=>`<span class="badge badge-cov">${cv}</span>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button class="btn btn-secondary btn-sm" onclick="openEditModal('${c.id}')">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="confirmDelete('${c.id}')">🗑 Delete</button>
+      </div>
+    </div>
+
+    <!-- PANEL: PERSONAL -->
+    <div class="profile-panel active" id="panel-personal">
+      <div class="profile-grid">
+        <div class="info-card">
+          <div class="info-card-title">Personal Information</div>
+          ${ir('Date of Birth', fmtDate(c.dob))}
+          ${ir('Age', a ? a+' years old' : null)}
+          ${ir('Gender', c.gender)}
+          ${ir('Marital Status', c.marital)}
+          ${ir('ID / SSN (last 4)', c.ssn ? '***-**-'+c.ssn : null)}
+          ${ir('Education Level', c.education)}
+          ${ir('Insurance Experience', c.insExperience)}
+        </div>
+        <div>
+          <div class="info-card" style="margin-bottom:16px">
+            <div class="info-card-title">Contact</div>
+            ${ir('Email', c.email)}
+            ${ir('Phone', c.phone)}
+            ${ir('Address', c.address)}
+          </div>
+          <div class="info-card">
+            <div class="info-card-title">Health</div>
+            ${ir('Smoker', c.smoker)}
+            ${ir('Pre-existing Conditions', c.conditions||'None noted')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: FINANCIAL -->
+    <div class="profile-panel" id="panel-financial">
+      <div class="profile-grid">
+        <div class="info-card">
+          <div class="info-card-title">Employment</div>
+          ${ir('Employer', c.employer)}
+          ${ir('Occupation', c.occupation)}
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">Income &amp; Affordability (Q4)</div>
+          ${ir('Monthly Disposable Income', c.monthlyIncome ? fmtHKD(c.monthlyIncome)+'/mo' : null)}
+          ${ir('Income Range', c.incomeRange)}
+          ${ir('% of Income for Premium', c.incomePct)}
+          ${ir('Premium Payment Willingness', c.premiumPeriod)}
+          ${ir('Sources of Funds', (c.fundSources||[]).join(', ')||null)}
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">Liquid Assets &amp; Liabilities</div>
+          ${ir('Total Liquid Assets [A]', fmtHKD(c.liquidAssets))}
+          ${ir('Asset Types', (c.liquidAssetTypes||[]).join(', ')||null)}
+          ${ir('Total Liabilities [B]', fmtHKD(c.liabilities))}
+          ${ir('Liability Types', (c.liabilityTypes||[]).join(', ')||null)}
+          ${ir('Net Amount [C = A−B]', fmtHKD(c.netAmount))}
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">Premium Financing</div>
+          ${ir('Using Premium Financing?', c.premiumFinancing)}
+          ${c.premiumFinancing==='Yes' ? ir('Lender', c.lender) : ''}
+          ${c.premiumFinancing==='Yes' ? ir('Loan Principal', fmtHKD(c.loanPrincipal)) : ''}
+          ${c.premiumFinancing==='Yes' ? ir('Interest Rate', c.loanRate ? c.loanRate+'% p.a.' : null) : ''}
+          ${c.premiumFinancing==='Yes' ? ir('Repayment Period', c.loanMonths ? c.loanMonths+' months' : null) : ''}
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: FNA OBJECTIVES -->
+    <div class="profile-panel" id="panel-fna">
+      <div class="profile-grid">
+        <div class="info-card">
+          <div class="info-card-title">Q1 — Insurance Objectives</div>
+          ${(c.objectives||[]).length ? (c.objectives||[]).map(o=>`
+            <div class="info-row">
+              <span class="info-label">${o.toUpperCase()}</span>
+              <span class="info-value"><span class="badge badge-obj">${OBJ_LABELS[o]||o}</span></span>
+            </div>`).join('') : '<div style="color:var(--text-muted);font-size:13px;padding:10px 0">No objectives recorded.</div>'}
+          ${c.objectives?.includes('d') && c.targetSaving ? `<div class="info-row"><span class="info-label">Target Saving Amount</span><span class="info-value">${fmtHKD(c.targetSaving)}</span></div>` : ''}
+          ${c.objectives?.includes('f') && c.objOther ? `<div class="info-row"><span class="info-label">Others</span><span class="info-value">${c.objOther}</span></div>` : ''}
+        </div>
+        <div>
+          <div class="info-card" style="margin-bottom:16px">
+            <div class="info-card-title">Q2 — Investment Management Preference</div>
+            ${c.objectives?.includes('e')
+              ? ir('Preference', invPrefLabel[c.invPref] || c.invPref)
+              : '<div style="color:var(--text-muted);font-size:13px;padding:10px 0">Investment not selected as an objective.</div>'}
+          </div>
+          <div class="info-card">
+            <div class="info-card-title">Q3 — Target Protection Period</div>
+            ${ir('Protection Period', c.protectionPeriod)}
+            <div class="info-card-title" style="margin-top:14px">Coverage Interests</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:8px">
+              ${(c.coverage||[]).map(cv=>`<span class="badge badge-cov">${cv}</span>`).join('')||'<span style="color:var(--text-muted);font-size:13px">None selected</span>'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: PROTECTION NEEDS -->
+    <div class="profile-panel" id="panel-protection">
+      <div style="margin-bottom:16px" class="info-card">
+        <div class="info-card-title">Life Protection Summary</div>
+        <div class="profile-grid" style="gap:12px">
+          ${ir('Life Protection Shortfall', fmtHKD(c.lifeShortfall))}
+          ${ir('Total Sum Assured', fmtHKD(c.sumAssured))}
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Other Life &amp; Risk Protection Needs</div>
+        <table class="analysis-table">
+          <thead><tr><th>Coverage Type</th><th>Needed</th><th>Existing</th><th>Shortfall</th></tr></thead>
+          <tbody>
+            ${needsRow('Hospital Income (Daily)', c.hospIncomeNeeded, c.hospIncomeExisting)}
+            ${needsRow('Hospitalization (Room & Board)', c.hospRoomNeeded, c.hospRoomExisting)}
+            ${needsRow('Surgical Fees', c.surgicalNeeded, c.surgicalExisting)}
+            ${needsRow('Critical Illness', c.ciNeeded, c.ciExisting)}
+            ${needsRow('Accidental Death & Disability', c.accidentNeeded, c.accidentExisting)}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PANEL: RETIREMENT & EDUCATION -->
+    <div class="profile-panel" id="panel-retirement">
+      <div class="profile-grid" style="margin-bottom:16px">
+        <div class="info-card">
+          <div class="info-card-title">Retirement Fund Need</div>
+          ${ir('Years to Retirement', c.yearsRetire ? c.yearsRetire+' yrs' : null)}
+          ${ir('Retirement Period', c.retirePeriod ? c.retirePeriod+' yrs' : null)}
+          ${ir('Monthly Expenses (PV)', fmtHKD(c.retireExpensesPV))}
+          ${ir('Monthly Expenses (FV)', fmtHKD(c.retireExpensesFV))}
+          ${ir('Total Retirement Needs (A)', fmtHKD(c.retireNeeds))}
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">Retirement Fund Reserved</div>
+          ${ir('Projected MPF/ORSO (B)', fmtHKD(c.mpfProjected))}
+          ${ir('Other Savings (C)', fmtHKD(c.retireOtherSavings))}
+          <div class="info-row">
+            <span class="info-label">Shortfall (A−B−C)</span>
+            <span class="info-value ${c.retireShortfall>0?'shortfall':''}" style="color:${c.retireShortfall>0?'var(--danger)':'var(--success)'};font-weight:600">
+              ${c.retireShortfall ? fmtHKD(c.retireShortfall) : '—'}
+            </span>
+          </div>
+        </div>
+      </div>
+      ${(c.children||[]).length ? `
+      <div class="info-card">
+        <div class="info-card-title">Children Education Fund</div>
+        <div class="children-grid">
+          ${(c.children||[]).map(ch=>`
+            <div class="child-card">
+              <div class="child-card-name">${ch.name}</div>
+              <div class="profile-grid" style="gap:8px">
+                ${ir('Age', ch.age ? ch.age+' yrs' : null)}
+                ${ir('Country of Study', ch.country)}
+                ${ir('Savings Period', ch.savingsPeriod ? ch.savingsPeriod+' yrs' : null)}
+                ${ir('Fund Needed (FV)', fmtHKD(ch.fundNeeded))}
+                ${ir('Fund Reserved (FV)', fmtHKD(ch.fundReserved))}
+                ${ir('Shortfall', ch.fundNeeded&&ch.fundReserved ? fmtHKD(Math.max(0,ch.fundNeeded-ch.fundReserved)) : null)}
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>` : '<div class="info-card"><div class="info-card-title">Children Education Fund</div><div style="color:var(--text-muted);font-size:13px;padding:8px 0">No children recorded.</div></div>'}
+    </div>
+
+    <!-- PANEL: POLICY & CRM -->
+    <div class="profile-panel" id="panel-policy">
+      <div class="profile-grid">
+        <div class="info-card">
+          <div class="info-card-title">Policy Details</div>
+          ${ir('Insurer / Carrier', c.insurer)}
+          ${ir('Policy Number', c.policyNum)}
+          ${ir('Annual Premium', c.premium ? 'HK$'+Number(c.premium).toLocaleString() : null)}
+          ${ir('Policy Expiry', fmtDate(c.expiry))}
+          ${ir('Beneficiary', c.beneficiary)}
+          ${ir('Beneficiary Relationship', c.beneRel)}
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">CRM Info</div>
+          ${ir('Status', c.status)}
+          ${ir('Assigned Consultant', c.broker)}
+          ${ir('Client Since', new Date(c.createdAt).toLocaleDateString())}
+          <div style="margin-top:12px">
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.5px">Broker Notes</div>
+            <div style="font-size:13.5px;color:${c.notes?'var(--text)':'var(--text-muted)'}">${c.notes||'No notes.'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+}
+
+function ir(label, val) {
+  return `<div class="info-row"><span class="info-label">${label}</span><span class="info-value">${val||'—'}</span></div>`;
+}
+function needsRow(label, needed, existing) {
+  const n = Number(needed)||0, e = Number(existing)||0, sf = Math.max(0, n-e);
+  const sfClass = sf>0 ? 'shortfall' : 'ok';
+  return `<tr>
+    <td>${label}</td>
+    <td>${n ? fmtHKD(n) : '—'}</td>
+    <td>${e ? fmtHKD(e) : '—'}</td>
+    <td class="${sfClass}">${(n||e) ? fmtHKD(sf) : '—'}</td>
+  </tr>`;
+}
+
+// ── OPEN MODAL ────────────────────────────────────────────────
+function openAddModal() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Add New Client';
+  document.getElementById('client-form') && document.getElementById('client-form').reset();
+  // reset all checkboxes/radios manually
+  document.querySelectorAll('#client-modal input[type=checkbox]').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('#client-modal input[type=radio]').forEach(rb=>rb.checked=false);
+  document.querySelectorAll('#client-modal input:not([type=checkbox]):not([type=radio]):not([readonly])').forEach(i=>i.value='');
+  document.querySelectorAll('#client-modal select').forEach(s=>s.selectedIndex=0);
+  document.querySelectorAll('#client-modal textarea').forEach(t=>t.value='');
+  document.getElementById('target-saving-field').style.display='none';
+  document.getElementById('investment-field').style.display='none';
+  document.getElementById('obj-other-field').style.display='none';
+  document.getElementById('financing-details').style.display='none';
+  document.getElementById('children-list').innerHTML='';
+  childCount=0;
+  document.getElementById('client-modal').classList.add('open');
+}
+
+function openEditModal(id) {
+  const c = clients.find(x=>x.id===id); if(!c) return;
+  editingId = id;
+  document.getElementById('modal-title').textContent = 'Edit Client';
+  // Reset first
+  document.querySelectorAll('#client-modal input[type=checkbox]').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('#client-modal input[type=radio]').forEach(rb=>rb.checked=false);
+
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.value=v||''; };
+
+  // Tab 1
+  set('f-first',c.first); set('f-last',c.last); set('f-dob',c.dob); set('f-gender',c.gender);
+  set('f-marital',c.marital); set('f-ssn',c.ssn); set('f-email',c.email); set('f-phone',c.phone);
+  set('f-address',c.address); set('f-education',c.education); set('f-ins-experience',c.insExperience);
+  set('f-smoker',c.smoker); set('f-conditions',c.conditions);
+
+  // Tab 2
+  set('f-employer',c.employer); set('f-occupation',c.occupation);
+  set('f-monthly-income',c.monthlyIncome); set('f-income-range',c.incomeRange);
+  set('f-liquid-assets',c.liquidAssets); set('f-liabilities',c.liabilities);
+  set('f-net-amount',c.netAmount); set('f-premium-period',c.premiumPeriod);
+  set('f-income-pct',c.incomePct); set('f-premium-financing',c.premiumFinancing);
+  set('f-lender',c.lender); set('f-loan-principal',c.loanPrincipal);
+  set('f-loan-rate',c.loanRate); set('f-loan-months',c.loanMonths);
+  document.getElementById('financing-details').style.display = c.premiumFinancing==='Yes' ? '' : 'none';
+  (c.liquidAssetTypes||[]).forEach(v=>{ const cb=document.querySelector(`input[name=liquid][value="${v}"]`); if(cb) cb.checked=true; });
+  (c.liabilityTypes||[]).forEach(v=>{ const cb=document.querySelector(`input[name=liab][value="${v}"]`); if(cb) cb.checked=true; });
+  (c.fundSources||[]).forEach(v=>{ const cb=document.querySelector(`input[name=fundsrc][value="${v}"]`); if(cb) cb.checked=true; });
+
+  // Tab 3
+  (c.objectives||[]).forEach(v=>{ const cb=document.querySelector(`input[name=obj][value="${v}"]`); if(cb) cb.checked=true; });
+  document.getElementById('target-saving-field').style.display = (c.objectives||[]).includes('d') ? '' : 'none';
+  set('f-target-saving',c.targetSaving);
+  document.getElementById('investment-field').style.display = (c.objectives||[]).includes('e') ? '' : 'none';
+  document.getElementById('obj-other-field').style.display = (c.objectives||[]).includes('f') ? '' : 'none';
+  set('f-obj-other',c.objOther);
+  if(c.invPref){ const rb=document.querySelector(`input[name=inv-pref][value="${c.invPref}"]`); if(rb) rb.checked=true; }
+  if(c.protectionPeriod){ const rb=document.querySelector(`input[name=prot-period][value="${c.protectionPeriod}"]`); if(rb) rb.checked=true; }
+  (c.coverage||[]).forEach(v=>{ const cb=document.querySelector(`input[name=coverage][value="${v}"]`); if(cb) cb.checked=true; });
+
+  // Tab 4
+  set('f-life-shortfall',c.lifeShortfall); set('f-sum-assured',c.sumAssured);
+  set('f-hosp-income-needed',c.hospIncomeNeeded); set('f-hosp-income-existing',c.hospIncomeExisting); set('f-hosp-income-shortfall',c.hospIncomeShortfall);
+  set('f-hosp-room-needed',c.hospRoomNeeded); set('f-hosp-room-existing',c.hospRoomExisting); set('f-hosp-room-shortfall',c.hospRoomShortfall);
+  set('f-surgical-needed',c.surgicalNeeded); set('f-surgical-existing',c.surgicalExisting); set('f-surgical-shortfall',c.surgicalShortfall);
+  set('f-ci-needed',c.ciNeeded); set('f-ci-existing',c.ciExisting); set('f-ci-shortfall',c.ciShortfall);
+  set('f-accident-needed',c.accidentNeeded); set('f-accident-existing',c.accidentExisting); set('f-accident-shortfall',c.accidentShortfall);
+
+  // Tab 5
+  set('f-years-retire',c.yearsRetire); set('f-retire-period',c.retirePeriod);
+  set('f-retire-expenses-pv',c.retireExpensesPV); set('f-retire-expenses-fv',c.retireExpensesFV);
+  set('f-retire-needs',c.retireNeeds); set('f-mpf-projected',c.mpfProjected);
+  set('f-retire-other-savings',c.retireOtherSavings); set('f-retire-shortfall',c.retireShortfall);
+  populateChildren(c.children);
+
+  // Policy
+  set('f-insurer',c.insurer); set('f-policy-num',c.policyNum); set('f-premium',c.premium);
+  set('f-expiry',c.expiry); set('f-beneficiary',c.beneficiary); set('f-bene-rel',c.beneRel);
+  set('f-status',c.status); set('f-broker',c.broker); set('f-notes',c.notes);
+
+  document.getElementById('client-modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('client-modal').classList.remove('open'); editingId=null; }
+
+// ── SAVE CLIENT ───────────────────────────────────────────────
+function saveClient() {
+  const first = document.getElementById('f-first').value.trim();
+  const last  = document.getElementById('f-last').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  if(!first||!last||!email){ toast('First name, last name and email are required.','error'); switchTab('tab-personal'); return; }
+
+  const chk = (name) => [...document.querySelectorAll(`input[name=${name}]:checked`)].map(cb=>cb.value);
+  const radio = (name) => document.querySelector(`input[name=${name}]:checked`)?.value||'';
+  const v = (id) => document.getElementById(id)?.value||'';
+
+  const data = {
+    first, last, email,
+    dob: v('f-dob'), gender: v('f-gender'), marital: v('f-marital'), ssn: v('f-ssn'),
+    phone: v('f-phone'), address: v('f-address'), education: v('f-education'),
+    insExperience: v('f-ins-experience'), smoker: v('f-smoker'), conditions: v('f-conditions'),
+    // financial
+    employer: v('f-employer'), occupation: v('f-occupation'),
+    monthlyIncome: v('f-monthly-income'), incomeRange: v('f-income-range'),
+    liquidAssets: v('f-liquid-assets'), liabilities: v('f-liabilities'), netAmount: v('f-net-amount'),
+    liquidAssetTypes: chk('liquid'), liabilityTypes: chk('liab'),
+    premiumPeriod: v('f-premium-period'), incomePct: v('f-income-pct'), fundSources: chk('fundsrc'),
+    premiumFinancing: v('f-premium-financing'), lender: v('f-lender'),
+    loanPrincipal: v('f-loan-principal'), loanRate: v('f-loan-rate'), loanMonths: v('f-loan-months'),
+    // fna objectives
+    objectives: chk('obj'), targetSaving: v('f-target-saving'),
+    invPref: radio('inv-pref'), objOther: v('f-obj-other'),
+    protectionPeriod: radio('prot-period'), coverage: chk('coverage'),
+    // protection needs
+    lifeShortfall: v('f-life-shortfall'), sumAssured: v('f-sum-assured'),
+    hospIncomeNeeded: v('f-hosp-income-needed'), hospIncomeExisting: v('f-hosp-income-existing'), hospIncomeShortfall: v('f-hosp-income-shortfall'),
+    hospRoomNeeded: v('f-hosp-room-needed'), hospRoomExisting: v('f-hosp-room-existing'), hospRoomShortfall: v('f-hosp-room-shortfall'),
+    surgicalNeeded: v('f-surgical-needed'), surgicalExisting: v('f-surgical-existing'), surgicalShortfall: v('f-surgical-shortfall'),
+    ciNeeded: v('f-ci-needed'), ciExisting: v('f-ci-existing'), ciShortfall: v('f-ci-shortfall'),
+    accidentNeeded: v('f-accident-needed'), accidentExisting: v('f-accident-existing'), accidentShortfall: v('f-accident-shortfall'),
+    // retirement
+    yearsRetire: v('f-years-retire'), retirePeriod: v('f-retire-period'),
+    retireExpensesPV: v('f-retire-expenses-pv'), retireExpensesFV: v('f-retire-expenses-fv'),
+    retireNeeds: v('f-retire-needs'), mpfProjected: v('f-mpf-projected'),
+    retireOtherSavings: v('f-retire-other-savings'), retireShortfall: v('f-retire-shortfall'),
+    children: collectChildren(),
+    // policy
+    insurer: v('f-insurer'), policyNum: v('f-policy-num'), premium: v('f-premium'),
+    expiry: v('f-expiry'), beneficiary: v('f-beneficiary'), beneRel: v('f-bene-rel'),
+    status: v('f-status'), broker: v('f-broker'), notes: v('f-notes'),
+  };
+
+  if(editingId){
+    const idx = clients.findIndex(c=>c.id===editingId);
+    clients[idx] = { ...clients[idx], ...data };
+    toast('Client updated.','success');
+  } else {
+    clients.push({ id:uid(), createdAt:Date.now(), ...data });
+    toast('Client added.','success');
   }
+  save(); closeModal();
+  const active = document.querySelector('.view.active')?.id?.replace('view-','');
+  navigate(active||'customers', editingId);
 }
 
-loadImages();
+// ── DELETE ────────────────────────────────────────────────────
+function confirmDelete(id) {
+  const c = clients.find(x=>x.id===id); if(!c) return;
+  document.getElementById('confirm-title').textContent='Delete Client?';
+  document.getElementById('confirm-msg').textContent=`Remove ${c.first} ${c.last}? This cannot be undone.`;
+  document.getElementById('confirm-ok-btn').onclick = () => {
+    clients = clients.filter(x=>x.id!==id); save();
+    toast('Client deleted.','success'); closeConfirm(); navigate('customers');
+  };
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+function closeConfirm() { document.getElementById('confirm-overlay').classList.remove('open'); }
+
+// ── TOAST ─────────────────────────────────────────────────────
+function toast(msg, type='') {
+  const el=document.createElement('div'); el.className='toast '+type; el.textContent=msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(()=>el.remove(), 3000);
+}
+
+// ── SEED DATA ─────────────────────────────────────────────────
+function seedData() {
+  if(clients.length) return;
+  const samples = [
+    {
+      first:'Margaret', last:'Thompson', email:'mthompson@email.com', phone:'+852 9201 3040',
+      dob:'1978-04-12', gender:'Female', marital:'Married', ssn:'4521',
+      education:'University or above', insExperience:'5 years or above',
+      employer:'Horizon Tech', occupation:'Project Manager',
+      monthlyIncome:'45000', incomeRange:'HK$20,000 – HK$49,999',
+      liquidAssets:'800000', liabilities:'150000', netAmount:'650000',
+      liquidAssetTypes:['Bank accounts','Stocks'], liabilityTypes:['Credit card loan'],
+      premiumPeriod:'16-20 years', incomePct:'10% – 20%', fundSources:['Salary','Investments'],
+      premiumFinancing:'No',
+      objectives:['a','b','d'], targetSaving:'500000', protectionPeriod:'16-20 years',
+      coverage:['Home','Life','Health'],
+      lifeShortfall:'200000', sumAssured:'1500000',
+      hospIncomeNeeded:'2000', hospIncomeExisting:'1500', hospIncomeShortfall:'500',
+      hospRoomNeeded:'3000', hospRoomExisting:'2000', hospRoomShortfall:'1000',
+      ciNeeded:'500000', ciExisting:'300000', ciShortfall:'200000',
+      yearsRetire:'17', retirePeriod:'25', retireExpensesPV:'25000', retireExpensesFV:'40000',
+      retireNeeds:'12000000', mpfProjected:'2500000', retireOtherSavings:'1000000', retireShortfall:'8500000',
+      children:[{name:'Emily Thompson',age:'10',country:'UK',savingsPeriod:'8',fundNeeded:'1200000',fundReserved:'300000'}],
+      insurer:'Sun Life', policyNum:'SL-882341', premium:'28800', expiry:'2026-06-15',
+      beneficiary:'Richard Thompson', beneRel:'Spouse',
+      status:'Active', broker:'James Cole', notes:'Long-term client. Interested in increasing CI coverage.',
+      createdAt: Date.now()-1000*60*60*24*60,
+    },
+    {
+      first:'Daniel', last:'Rivera', email:'d.rivera@mail.com', phone:'+852 9302 5510',
+      dob:'1990-09-28', gender:'Male', marital:'Single', ssn:'7782',
+      education:'Secondary', insExperience:'Less than 5 years',
+      employer:'Self-employed', occupation:'Freelance Designer',
+      monthlyIncome:'18000', incomeRange:'HK$10,000 – HK$19,999',
+      liquidAssets:'200000', liabilities:'20000', netAmount:'180000',
+      liquidAssetTypes:['Cash','Bank accounts'], liabilityTypes:['Overdraft'],
+      premiumPeriod:'6-10 years', incomePct:'10% – 20%', fundSources:['Salary','Savings'],
+      premiumFinancing:'No',
+      objectives:['b','c'], protectionPeriod:'6-10 years',
+      coverage:['Health','Disability'],
+      lifeShortfall:'500000', sumAssured:'800000',
+      ciNeeded:'300000', ciExisting:'0', ciShortfall:'300000',
+      accidentNeeded:'500000', accidentExisting:'200000', accidentShortfall:'300000',
+      yearsRetire:'30', retirePeriod:'20', retireExpensesPV:'15000',
+      insurer:'BlueCross', policyNum:'BC-119023', premium:'21600', expiry:'2025-11-30',
+      beneficiary:'Maria Rivera', beneRel:'Mother',
+      status:'Active', broker:'James Cole', notes:'Freelancer — income varies. Review annually.',
+      createdAt: Date.now()-1000*60*60*24*45,
+    },
+    {
+      first:'Sophia', last:'Patel', email:'sophia.patel@corp.io', phone:'+852 9410 7733',
+      dob:'1985-01-05', gender:'Female', marital:'Married', ssn:'3301',
+      education:'University or above', insExperience:'5 years or above',
+      employer:'GreenBridge Corp', occupation:'Financial Analyst',
+      monthlyIncome:'85000', incomeRange:'HK$50,000 – HK$100,000',
+      liquidAssets:'2500000', liabilities:'300000', netAmount:'2200000',
+      liquidAssetTypes:['Bank accounts','Bonds / Mutual funds','Stocks'],
+      premiumPeriod:'Whole of life', incomePct:'10% – 20%', fundSources:['Salary','Investments','Savings'],
+      premiumFinancing:'No',
+      objectives:['a','b','d','e'], targetSaving:'2000000', invPref:'b', protectionPeriod:'Whole of life',
+      coverage:['Life','Health','Critical Illness','Umbrella'],
+      lifeShortfall:'0', sumAssured:'3000000',
+      ciNeeded:'1000000', ciExisting:'1000000', ciShortfall:'0',
+      hospRoomNeeded:'5000', hospRoomExisting:'3000', hospRoomShortfall:'2000',
+      yearsRetire:'20', retirePeriod:'30', retireExpensesPV:'40000', retireExpensesFV:'70000',
+      retireNeeds:'25200000', mpfProjected:'4000000', retireOtherSavings:'3000000', retireShortfall:'18200000',
+      children:[
+        {name:'Aryan Patel',age:'6',country:'Canada',savingsPeriod:'12',fundNeeded:'1500000',fundReserved:'500000'},
+        {name:'Priya Patel',age:'3',country:'Canada',savingsPeriod:'15',fundNeeded:'1500000',fundReserved:'200000'}
+      ],
+      insurer:'Manulife', policyNum:'ML-558800', premium:'37200', expiry:'2026-03-01',
+      beneficiary:'Arjun Patel', beneRel:'Spouse',
+      status:'Active', broker:'Sarah Kim', notes:'High-value client. Interested in expanding investment-linked plan.',
+      createdAt: Date.now()-1000*60*60*24*30,
+    },
+    {
+      first:'Kevin', last:'Brooks', email:'kbrooks@netmail.com', phone:'+852 9519 8800',
+      dob:'2001-07-14', gender:'Male', marital:'Single', ssn:'9910',
+      education:'Matriculate / Post Secondary', insExperience:'Without any experience',
+      occupation:'Student',
+      monthlyIncome:'5000', incomeRange:'Less than HK$10,000',
+      liquidAssets:'30000', liabilities:'0', netAmount:'30000',
+      liquidAssetTypes:['Cash'], premiumPeriod:'2-5 years', incomePct:'<10%', fundSources:['Savings'],
+      objectives:['a','b'], protectionPeriod:'1-5 years',
+      coverage:['Health','Disability'],
+      smoker:'No', conditions:'Asthma',
+      status:'Lead', broker:'Sarah Kim', notes:'Referred by Margaret Thompson. First-time buyer.',
+      createdAt: Date.now()-1000*60*60*24*10,
+    },
+    {
+      first:'Linda', last:'Okafor', email:'linda.o@webmail.org', phone:'+852 9633 2291',
+      dob:'1964-11-20', gender:'Female', marital:'Widowed', ssn:'6605',
+      education:'Secondary', insExperience:'5 years or above',
+      employer:'City Hospital', occupation:'Nurse',
+      monthlyIncome:'32000', incomeRange:'HK$20,000 – HK$49,999',
+      liquidAssets:'600000', liabilities:'80000', netAmount:'520000',
+      liquidAssetTypes:['Bank accounts','Cash'], liabilityTypes:['Personal loans'],
+      premiumPeriod:'11-15 years', incomePct:'10% – 20%', fundSources:['Salary'],
+      objectives:['b','c','d'], targetSaving:'1000000', protectionPeriod:'11-15 years',
+      coverage:['Health','Life','Critical Illness'],
+      smoker:'Former smoker', conditions:'Diabetes',
+      ciNeeded:'500000', ciExisting:'200000', ciShortfall:'300000',
+      yearsRetire:'6', retirePeriod:'20', retireExpensesPV:'20000', retireExpensesFV:'24000',
+      retireNeeds:'5760000', mpfProjected:'1200000', retireOtherSavings:'400000', retireShortfall:'4160000',
+      insurer:'AIA', policyNum:'AIA-334490', premium:'34800', expiry:'2025-12-20',
+      beneficiary:'Chidi Okafor', beneRel:'Son',
+      status:'Pending', broker:'James Cole', notes:'Policy renewal approaching Dec. Call November.',
+      createdAt: Date.now()-1000*60*60*24*20,
+    },
+  ];
+  samples.forEach(s=>clients.push({id:uid(),...s}));
+  save();
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+load();
+seedData();
+navigate('dashboard');
 </script>
 </body>
 </html>
