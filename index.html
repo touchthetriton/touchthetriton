@@ -24,23 +24,24 @@
     /* ── CSS VARIABLES ────────────────────────────────── */
     :root {
       /* Logo-extracted palette */
-      --teal:    #00c8e8;   /* logo bright teal/cyan */
-      --green:   #3ec86a;   /* logo lime-green */
-      --cobalt:  #4050c0;   /* logo deep indigo-blue */
-      --mint:    #00e0b8;   /* teal-green blend */
+      --teal:    #28dbf7;   /* Digital — eye iris electric cyan */
+      --green:   #5bba4b;   /* Smart — bright leafy green */
+      --cobalt:  #6090f0;   /* Data — bright electric blue */
+      --mint:    #5fbc90;   /* AI — green-teal */
       /* Aliases kept for existing class references */
-      --cyan:    #00c8e8;
-      --pink:    #3ec86a;
-      --blue:    #4050c0;
-      --purple:  #2a8fbf;
+      --cyan:    #c060f8;   /* neon violet — eye-derived structural chrome */
+      --pink:    #ff2080;
+      --blue:    #6090f0;
+      --purple:  #b060ff;
       /* Backgrounds — very dark tinted versions of logo colours */
       --dark:    #091520;   /* dark teal-blue */
       --darker:  #060f16;   /* deeper teal-blue */
       --dark-green: #081410; /* dark green-tinted sections */
       --neon-pink: #ff2080;  /* eye image hot pink */
+      --amber:   #00e8d0;   /* neon turquoise — eye circuit glow */
       --card-bg: rgba(10, 24, 38, 0.94);
-      --glass:   rgba(0, 200, 232, 0.07);
-      --border:  rgba(0, 200, 232, 0.2);
+      --glass:   rgba(192,96,248, 0.05);
+      --border:  rgba(192,96,248, 0.15);
     }
 
     /* ── SCROLLBAR ────────────────────────────────────── */
@@ -49,7 +50,7 @@
     ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 3px; }
 
     /* ── SELECTION ────────────────────────────────────── */
-    ::selection { background: rgba(0,240,255,0.25); color: #fff; }
+    ::selection { background: rgba(255,32,128,0.25); color: #fff; }
 
     /* ── NOISE OVERLAY ────────────────────────────────── */
     body::before {
@@ -63,15 +64,15 @@
     .grid-bg {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background-image:
-        linear-gradient(rgba(0,200,232,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(62,200,106,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(255,32,128,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91,186,75,0.03) 1px, transparent 1px);
       background-size: 60px 60px;
     }
 
     /* ── NEON GLOW HELPERS ────────────────────────────── */
-    .glow-cyan  { text-shadow: 0 0 8px var(--cyan),  0 0 30px rgba(0,240,255,0.4); }
-    .glow-pink  { text-shadow: 0 0 8px var(--pink),  0 0 30px rgba(255,0,170,0.4); }
-    .glow-blue  { text-shadow: 0 0 8px var(--blue),  0 0 30px rgba(10,106,255,0.4); }
+    .glow-cyan  { text-shadow: 0 0 8px var(--cyan),  0 0 30px rgba(255,32,128,0.4); }
+    .glow-pink  { text-shadow: 0 0 8px var(--pink),  0 0 30px rgba(255,32,128,0.4); }
+    .glow-blue  { text-shadow: 0 0 8px var(--blue),  0 0 30px rgba(96,144,240,0.4); }
 
     /* ── NAVIGATION ───────────────────────────────────── */
     nav {
@@ -101,12 +102,12 @@
     }
     .nav-slogan {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
+      font-size: 13px;
       letter-spacing: 1.8px;
       text-transform: uppercase;
       color: rgba(220,232,250,0.45);
       white-space: nowrap;
-      border-left: 1px solid rgba(0,200,232,0.25);
+      border-left: 1px solid rgba(255,32,128,0.25);
       padding-left: 14px;
       margin-left: 4px;
       line-height: 1.4;
@@ -138,15 +139,15 @@
       border: 1px solid var(--cyan);
       color: var(--cyan) !important;
       font-family: 'Orbitron', sans-serif !important;
-      font-size: 12px !important;
+      font-size: 13px !important;
       letter-spacing: 2px !important;
       cursor: pointer;
       transition: background 0.25s, box-shadow 0.25s !important;
       clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
     }
     .nav-cta:hover {
-      background: rgba(0,240,255,0.1) !important;
-      box-shadow: 0 0 20px rgba(0,240,255,0.3) !important;
+      background: rgba(255,32,128,0.1) !important;
+      box-shadow: 0 0 20px rgba(255,32,128,0.3) !important;
     }
     .nav-cta::after { display: none !important; }
 
@@ -204,7 +205,7 @@
       aspect-ratio: 1;
       border-radius: 50%;
       background: radial-gradient(circle,
-        rgba(0,200,232,0.10) 0%,
+        rgba(255,32,128,0.10) 0%,
         rgba(255,32,128,0.12) 45%,
         rgba(255,32,128,0.05) 65%,
         transparent 80%);
@@ -262,8 +263,8 @@
       margin-bottom: 10px;
     }
     .hero-h1 .accent {
-      color: var(--cyan);
-      text-shadow: 0 0 15px rgba(0,240,255,0.6), 0 0 50px rgba(0,240,255,0.25);
+      color: var(--teal);
+      text-shadow: 0 0 15px rgba(40,219,247,0.6), 0 0 50px rgba(40,219,247,0.25);
     }
     .hero-h1 .accent2 { color: var(--neon-pink); text-shadow: 0 0 15px rgba(255,32,128,0.65), 0 0 50px rgba(255,32,128,0.25); }
 
@@ -283,14 +284,14 @@
       background: linear-gradient(135deg, var(--teal), var(--cobalt));
       color: #fff;
       font-family: 'Orbitron', sans-serif;
-      font-size: 12px; font-weight: 700;
+      font-size: 13px; font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
       text-decoration: none;
       clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
       transition: filter 0.25s, transform 0.2s;
     }
-    .btn-primary:hover { filter: brightness(1.2) drop-shadow(0 0 12px rgba(0,240,255,0.6)); transform: translateY(-2px); }
+    .btn-primary:hover { filter: brightness(1.2) drop-shadow(0 0 12px rgba(255,32,128,0.6)); transform: translateY(-2px); }
 
     .btn-outline {
       display: inline-flex; align-items: center; gap: 8px;
@@ -298,14 +299,14 @@
       border: 1px solid rgba(255,255,255,0.25);
       color: rgba(200,216,240,0.85);
       font-family: 'Orbitron', sans-serif;
-      font-size: 12px; font-weight: 700;
+      font-size: 13px; font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
       text-decoration: none;
       clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
       transition: border-color 0.25s, color 0.25s, background 0.25s;
     }
-    .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(0,240,255,0.05); }
+    .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(255,32,128,0.05); }
 
     .hero-stats {
       position: absolute; bottom: 60px; right: 5vw; z-index: 3;
@@ -316,12 +317,12 @@
       font-family: 'Orbitron', sans-serif;
       font-size: 32px; font-weight: 900;
       color: var(--cyan);
-      text-shadow: 0 0 15px rgba(0,240,255,0.5);
+      text-shadow: 0 0 15px rgba(192,96,248,0.5);
       display: block;
     }
     .hero-stat .label {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
       color: rgba(200,216,240,0.5);
     }
 
@@ -329,13 +330,13 @@
     .scroll-hint {
       position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
       z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 6px;
-      font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 3px;
-      color: rgba(0,240,255,0.4); text-transform: uppercase;
+      font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 3px;
+      color: rgba(255,32,128,0.4); text-transform: uppercase;
     }
     .scroll-hint .chevron {
       width: 18px; height: 18px;
-      border-right: 1px solid rgba(0,240,255,0.4);
-      border-bottom: 1px solid rgba(0,240,255,0.4);
+      border-right: 1px solid rgba(255,32,128,0.4);
+      border-bottom: 1px solid rgba(255,32,128,0.4);
       transform: rotate(45deg);
       animation: bounce 1.6s infinite;
     }
@@ -360,7 +361,7 @@
       font-weight: 800; line-height: 1.1;
       color: #fff; margin-bottom: 20px;
     }
-    .section-title span { color: var(--cyan); text-shadow: 0 0 20px rgba(0,240,255,0.4); }
+    .section-title span { color: var(--cyan); text-shadow: 0 0 20px rgba(192,96,248,0.45); }
 
     .section-body {
       font-size: 18px; color: rgba(220,232,250,0.78);
@@ -374,7 +375,7 @@
     }
 
     /* ── ABOUT ────────────────────────────────────────── */
-    #about { background: #0a1a14; }  /* dark green tint */
+    #about { background: #132d1e; }  /* dark green tint */
 
     .about-grid {
       display: grid;
@@ -389,13 +390,13 @@
     }
     .about-hex {
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(0,240,255,0.08), rgba(123,47,255,0.12));
+      background: linear-gradient(135deg, rgba(255,32,128,0.08), rgba(192,96,248,0.12));
       clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-      border: 1px solid rgba(0,240,255,0.2);
+      border: 1px solid rgba(255,32,128,0.2);
     }
     .about-hex-inner {
       position: absolute; inset: 20px;
-      background: linear-gradient(135deg, rgba(0,240,255,0.05), rgba(10,106,255,0.08));
+      background: linear-gradient(135deg, rgba(255,32,128,0.05), rgba(96,144,240,0.08));
       clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
       display: flex; align-items: center; justify-content: center;
     }
@@ -418,7 +419,7 @@
       padding: 6px 16px;
       border: 1px solid var(--border);
       font-family: 'Share Tech Mono', monospace;
-      font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
       color: rgba(200,216,240,0.6);
       background: var(--glass);
       clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
@@ -427,7 +428,7 @@
     .pill:hover { border-color: var(--cyan); color: var(--cyan); }
 
     /* ── INTELLIGENCE LOOP ────────────────────────────── */
-    .loop-section { background: #091520; }
+    .loop-section { background: #0e1e38; }
     .loop-header { text-align: center; }
 
     .loop-grid {
@@ -463,7 +464,7 @@
 
     .loop-num {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 2px;
+      font-size: 13px; letter-spacing: 2px;
       color: rgba(200,216,240,0.15);
       margin-bottom: 16px;
     }
@@ -475,19 +476,19 @@
       margin-bottom: 20px;
       clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
     }
-    .loop-digital  { border-color: rgba(0,200,232,0.35);  color: var(--teal);   background: rgba(0,200,232,0.07); }
-    .loop-data     { border-color: rgba(64,80,192,0.35);  color: var(--cobalt); background: rgba(64,80,192,0.07); }
-    .loop-ai       { border-color: rgba(0,224,184,0.35);  color: var(--mint);   background: rgba(0,224,184,0.07); }
-    .loop-smart    { border-color: rgba(62,200,106,0.35); color: var(--green);  background: rgba(62,200,106,0.07); }
+    .loop-digital  { border-color: rgba(40,219,247,0.35);  color: var(--teal);   background: rgba(40,219,247,0.07); }
+    .loop-data     { border-color: rgba(96,144,240,0.35);  color: var(--cobalt); background: rgba(96,144,240,0.07); }
+    .loop-ai       { border-color: rgba(95,188,144,0.35);  color: var(--mint);   background: rgba(95,188,144,0.07); }
+    .loop-smart    { border-color: rgba(91,186,75,0.35); color: var(--green);  background: rgba(91,186,75,0.07); }
 
-    .loop-card:nth-child(1) { border-color: rgba(0,200,232,0.18); }
-    .loop-card:nth-child(1):hover { border-color: rgba(0,200,232,0.45); }
-    .loop-card:nth-child(3) { border-color: rgba(64,80,192,0.18); }
-    .loop-card:nth-child(3):hover { border-color: rgba(64,80,192,0.45); }
-    .loop-card:nth-child(5) { border-color: rgba(0,224,184,0.18); }
-    .loop-card:nth-child(5):hover { border-color: rgba(0,224,184,0.45); }
-    .loop-card:nth-child(7) { border-color: rgba(62,200,106,0.18); }
-    .loop-card:nth-child(7):hover { border-color: rgba(62,200,106,0.45); }
+    .loop-card:nth-child(1) { border-color: rgba(40,219,247,0.18); }
+    .loop-card:nth-child(1):hover { border-color: rgba(40,219,247,0.45); }
+    .loop-card:nth-child(3) { border-color: rgba(96,144,240,0.18); }
+    .loop-card:nth-child(3):hover { border-color: rgba(96,144,240,0.45); }
+    .loop-card:nth-child(5) { border-color: rgba(95,188,144,0.18); }
+    .loop-card:nth-child(5):hover { border-color: rgba(95,188,144,0.45); }
+    .loop-card:nth-child(7) { border-color: rgba(91,186,75,0.18); }
+    .loop-card:nth-child(7):hover { border-color: rgba(91,186,75,0.45); }
 
     .loop-word {
       font-family: 'Orbitron', sans-serif;
@@ -497,19 +498,20 @@
     }
     .loop-role {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
       color: rgba(200,216,240,0.4);
       margin-bottom: 16px;
       display: flex; align-items: center; gap: 8px;
     }
     .loop-tag {
-      font-size: 9px; padding: 2px 8px;
-      background: rgba(0,240,255,0.1);
-      border: 1px solid rgba(0,240,255,0.2);
-      color: var(--cyan); letter-spacing: 1px;
+      font-size: 12px; padding: 2px 8px;
+      background: rgba(40,219,247,0.1);
+      border: 1px solid rgba(40,219,247,0.2);
+      color: var(--teal); letter-spacing: 1px;
     }
-    .loop-tag-purple { background: rgba(123,47,255,0.1); border-color: rgba(123,47,255,0.2); color: var(--purple); }
-    .loop-tag-pink   { background: rgba(255,0,170,0.1);  border-color: rgba(255,0,170,0.2);  color: var(--pink); }
+    .loop-tag-data   { background: rgba(96,144,240,0.1);   border-color: rgba(96,144,240,0.2);   color: var(--cobalt); }
+    .loop-tag-ai     { background: rgba(95,188,144,0.1);  border-color: rgba(95,188,144,0.2);  color: var(--mint); }
+    .loop-tag-pink   { background: rgba(255,32,128,0.1);  border-color: rgba(255,32,128,0.2);  color: var(--neon-pink); }
 
     .loop-desc {
       font-size: 15px; color: rgba(220,232,250,0.72);
@@ -518,19 +520,19 @@
     .loop-biz {
       font-size: 14px; color: rgba(220,232,250,0.55);
       line-height: 1.6;
-      border-left: 2px solid rgba(0,240,255,0.15);
+      border-left: 2px solid rgba(255,32,128,0.15);
       padding-left: 12px; margin-bottom: 16px;
     }
     .loop-biz-label {
       display: block;
       font-family: 'Share Tech Mono', monospace;
-      font-size: 9px; letter-spacing: 2px; color: rgba(0,240,255,0.4);
+      font-size: 12px; letter-spacing: 2px; color: rgba(255,32,128,0.4);
       margin-bottom: 4px;
     }
     .loop-tree-metaphor {
       display: inline-flex; align-items: center; gap: 6px;
       font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
       color: rgba(200,216,240,0.2);
     }
 
@@ -541,15 +543,15 @@
     .loop-statement-inner {
       text-align: center;
       padding: 36px 48px;
-      border: 1px solid rgba(0,240,255,0.12);
-      background: rgba(0,240,255,0.03);
+      border: 1px solid rgba(255,32,128,0.12);
+      background: rgba(255,32,128,0.03);
       max-width: 780px;
       clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
     }
     .loop-statement-label {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-      color: rgba(0,240,255,0.4); margin-bottom: 16px;
+      font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,32,128,0.4); margin-bottom: 16px;
     }
     .loop-quote {
       font-family: 'Orbitron', sans-serif;
@@ -560,14 +562,14 @@
       letter-spacing: 0.5px;
       font-style: normal;
     }
-    .lq-digital { color: var(--teal);   text-shadow: 0 0 12px rgba(0,200,232,0.45); }
-    .lq-ai      { color: var(--mint);   text-shadow: 0 0 12px rgba(0,224,184,0.45); }
-    .lq-smart   { color: var(--green);  text-shadow: 0 0 12px rgba(62,200,106,0.45); }
+    .lq-digital { color: var(--teal);   text-shadow: 0 0 12px rgba(40,219,247,0.45); }
+    .lq-ai      { color: var(--mint);   text-shadow: 0 0 12px rgba(95,188,144,0.45); }
+    .lq-smart   { color: var(--green);  text-shadow: 0 0 12px rgba(91,186,75,0.45); }
 
     /* ── SERVICES ─────────────────────────────────────── */
     #services {
-      background: #091520;
-      background-image: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(64,80,192,0.1) 0%, transparent 70%);
+      background: #0e1e38;
+      background-image: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(96,144,240,0.12) 0%, transparent 70%);
     }
 
     .services-header { text-align: center; max-width: 680px; margin: 0 auto 70px; }
@@ -594,16 +596,16 @@
       background: linear-gradient(90deg, transparent, var(--glow-color, var(--cyan)), transparent);
       opacity: 0; transition: opacity 0.3s;
     }
-    .service-card:hover { border-color: rgba(0,240,255,0.4); transform: translateY(-6px); }
+    .service-card:hover { border-color: rgba(255,32,128,0.4); transform: translateY(-6px); }
     .service-card:hover::before { opacity: 1; }
 
     .service-card.pink  { --glow-color: var(--pink); }
     .service-card.blue  { --glow-color: var(--blue); }
     .service-card.purple{ --glow-color: var(--purple); }
 
-    .service-card.pink:hover  { border-color: rgba(255,0,170,0.4); }
-    .service-card.blue:hover  { border-color: rgba(10,106,255,0.4); }
-    .service-card.purple:hover{ border-color: rgba(123,47,255,0.4); }
+    .service-card.pink:hover  { border-color: rgba(255,32,128,0.4); }
+    .service-card.blue:hover  { border-color: rgba(96,144,240,0.4); }
+    .service-card.purple:hover{ border-color: rgba(192,96,248,0.4); }
 
     .service-icon {
       width: 56px; height: 56px; margin-bottom: 24px;
@@ -658,19 +660,19 @@
     .service-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
     .service-tag {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 1.5px;
+      font-size: 12px; letter-spacing: 1.5px;
       color: var(--glow-color, var(--cyan));
-      border: 1px solid rgba(0,240,255,0.15);
+      border: 1px solid rgba(255,32,128,0.15);
       padding: 3px 10px;
       opacity: 0.7;
     }
-    .service-card.pink  .service-tag { border-color: rgba(255,0,170,0.2); }
-    .service-card.blue  .service-tag { border-color: rgba(10,106,255,0.2); }
-    .service-card.purple .service-tag { border-color: rgba(123,47,255,0.2); }
+    .service-card.pink  .service-tag { border-color: rgba(255,32,128,0.2); }
+    .service-card.blue  .service-tag { border-color: rgba(96,144,240,0.2); }
+    .service-card.purple .service-tag { border-color: rgba(192,96,248,0.2); }
 
     /* ── CAPABILITIES ROW ─────────────────────────────── */
     #capabilities {
-      background: #0a1a14;  /* dark green tint */
+      background: #132d1e;  /* dark green tint */
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       padding: 80px 0;
@@ -692,10 +694,10 @@
       text-align: center;
       transition: background 0.3s;
     }
-    .cap-item:hover { background: rgba(0,240,255,0.03); }
+    .cap-item:hover { background: rgba(255,32,128,0.03); }
 
     .cap-icon {
-      color: var(--cyan);
+      color: var(--amber);
       margin-bottom: 16px;
       opacity: 0.85;
     }
@@ -708,8 +710,8 @@
     .cap-num {
       font-family: 'Orbitron', sans-serif;
       font-size: 44px; font-weight: 900;
-      color: var(--cyan);
-      text-shadow: 0 0 20px rgba(0,240,255,0.4);
+      color: var(--amber);
+      text-shadow: 0 0 20px rgba(0,232,208,0.4);
       display: block; line-height: 1;
       margin-bottom: 10px;
     }
@@ -721,7 +723,7 @@
     }
 
     /* ── HOW WE WORK ──────────────────────────────────── */
-    #process { background: #091520; }
+    #process { background: #0e1e38; }
 
     .process-grid {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
@@ -730,7 +732,7 @@
     .process-grid::before {
       content: ''; position: absolute; top: 32px; left: 12.5%; right: 12.5%;
       height: 1px;
-      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      background: linear-gradient(90deg, var(--amber), var(--purple));
       opacity: 0.3;
     }
     @media (max-width: 900px) {
@@ -752,13 +754,13 @@
       margin: 0 auto 24px;
       font-family: 'Orbitron', sans-serif;
       font-size: 16px; font-weight: 900;
-      color: var(--cyan);
+      color: var(--amber);
       position: relative; z-index: 1;
       transition: border-color 0.3s, box-shadow 0.3s;
     }
     .process-step:hover .process-dot {
-      border-color: var(--cyan);
-      box-shadow: 0 0 25px rgba(0,240,255,0.3);
+      border-color: var(--amber);
+      box-shadow: 0 0 25px rgba(0,232,208,0.3);
     }
     .process-step-title {
       font-family: 'Orbitron', sans-serif;
@@ -769,12 +771,13 @@
 
     /* ── WHY CYBERVISION ──────────────────────────────── */
     #why {
-      background: #0a1a14;
-      background-image: radial-gradient(ellipse 70% 50% at 0% 50%, rgba(62,200,106,0.07) 0%, transparent 70%);
+      background: #132d1e;
+      background-image: radial-gradient(ellipse 70% 50% at 0% 50%, rgba(91,186,75,0.07) 0%, transparent 70%);
     }
 
     .why-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+      display: grid; grid-template-columns: 1fr; gap: 40px; align-items: start;
+      max-width: 780px;
     }
 
     .why-list { display: flex; flex-direction: column; gap: 28px; }
@@ -786,7 +789,7 @@
       transition: border-color 0.3s;
       clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
     }
-    .why-item:hover { border-color: rgba(0,240,255,0.3); }
+    .why-item:hover { border-color: rgba(255,32,128,0.3); }
 
     .why-icon {
       width: 44px; height: 44px; flex-shrink: 0;
@@ -811,7 +814,7 @@
     }
     .why-visual-title {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
       color: var(--cyan); margin-bottom: 24px;
     }
 
@@ -821,10 +824,10 @@
     .cert-badge {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 8px 18px;
-      border: 1px solid rgba(0,240,255,0.2);
-      background: rgba(0,240,255,0.04);
+      border: 1px solid rgba(255,32,128,0.2);
+      background: rgba(255,32,128,0.04);
       font-family: 'Share Tech Mono', monospace;
-      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
       color: rgba(200,216,240,0.7);
       clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
       transition: border-color 0.2s, color 0.2s;
@@ -839,11 +842,11 @@
       padding: 14px 10px; text-align: center;
       border: 1px solid var(--border);
       font-family: 'Share Tech Mono', monospace;
-      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
       color: rgba(200,216,240,0.45);
       transition: border-color 0.2s, color 0.2s;
     }
-    .tech-item:hover { border-color: rgba(0,240,255,0.3); color: var(--cyan); }
+    .tech-item:hover { border-color: rgba(255,32,128,0.3); color: var(--cyan); }
 
     /* ── CREDIBILITY TABLE ────────────────────────────── */
     .cred-table-wrap {
@@ -854,19 +857,19 @@
       font-family: 'Rajdhani', sans-serif;
     }
     .cred-table thead tr {
-      border-bottom: 1px solid rgba(0,240,255,0.25);
+      border-bottom: 1px solid rgba(0,232,208,0.25);
     }
     .cred-table th {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
-      color: var(--cyan);
+      font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--amber);
       padding: 12px 20px; text-align: left;
     }
     .cred-table tbody tr {
-      border-bottom: 1px solid rgba(0,240,255,0.07);
+      border-bottom: 1px solid rgba(0,232,208,0.07);
       transition: background 0.2s;
     }
-    .cred-table tbody tr:hover { background: rgba(0,240,255,0.04); }
+    .cred-table tbody tr:hover { background: rgba(0,232,208,0.04); }
     .cred-table td {
       padding: 18px 20px;
       font-size: 16px; color: rgba(220,232,250,0.78);
@@ -874,12 +877,12 @@
     }
     .cred-sector {
       font-family: 'Orbitron', sans-serif;
-      font-size: 12px; font-weight: 700;
+      font-size: 13px; font-weight: 700;
       color: #fff; letter-spacing: 1px;
     }
 
     /* ── INDUSTRIES ───────────────────────────────────── */
-    #industries { background: #091520; padding: 80px 0; }
+    #industries { background: #0e1e38; padding: 80px 0; }
 
     .industries-header { text-align: center; margin-bottom: 50px; }
 
@@ -904,7 +907,7 @@
       border: 1px solid var(--border);
       white-space: nowrap;
       font-family: 'Share Tech Mono', monospace;
-      font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
       color: rgba(200,216,240,0.5);
       clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
       transition: border-color 0.2s, color 0.2s;
@@ -913,8 +916,8 @@
 
     /* ── CONTACT ──────────────────────────────────────── */
     #contact {
-      background: #0a1a14;
-      background-image: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,200,232,0.05) 0%, transparent 70%);
+      background: #132d1e;
+      background-image: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,32,128,0.05) 0%, transparent 70%);
     }
 
     .contact-grid {
@@ -934,7 +937,7 @@
     .contact-info-icon svg { width: 16px; height: 16px; }
     .contact-info-label {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
       color: rgba(200,216,240,0.35); margin-bottom: 4px;
     }
     .contact-info-val { font-size: 16px; color: rgba(220,232,250,0.85); }
@@ -944,7 +947,7 @@
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-label {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+      font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
       color: rgba(220,232,250,0.6);
     }
     .form-input, .form-textarea {
@@ -959,7 +962,7 @@
     }
     .form-input:focus, .form-textarea:focus {
       border-color: var(--cyan);
-      box-shadow: 0 0 0 1px rgba(0,240,255,0.15);
+      box-shadow: 0 0 0 1px rgba(255,32,128,0.15);
     }
     .form-textarea { resize: vertical; min-height: 130px; }
     .form-input::placeholder, .form-textarea::placeholder { color: rgba(200,216,240,0.2); }
@@ -992,7 +995,7 @@
 
     .footer-col-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
       color: #fff; margin-bottom: 20px;
     }
     .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
@@ -1021,24 +1024,24 @@
     .footer-loop-item:last-child { border-right: none; }
     .footer-loop-item:hover { background: rgba(255,255,255,0.03); }
 
-    .footer-loop-digital:hover { background: rgba(0,240,255,0.05); }
-    .footer-loop-data:hover    { background: rgba(10,106,255,0.05); }
-    .footer-loop-ai:hover      { background: rgba(123,47,255,0.05); }
-    .footer-loop-smart:hover   { background: rgba(255,0,170,0.05); }
+    .footer-loop-digital:hover { background: rgba(40,219,247,0.05); }
+    .footer-loop-data:hover    { background: rgba(96,144,240,0.05); }
+    .footer-loop-ai:hover      { background: rgba(95,188,144,0.05); }
+    .footer-loop-smart:hover   { background: rgba(91,186,75,0.05); }
 
     .footer-loop-label {
       font-family: 'Orbitron', sans-serif;
       font-size: 15px; font-weight: 800;
       letter-spacing: 2px;
     }
-    .footer-loop-digital .footer-loop-label { color: var(--teal);   text-shadow: 0 0 12px rgba(0,200,232,0.45); }
-    .footer-loop-data    .footer-loop-label { color: var(--cobalt); text-shadow: 0 0 12px rgba(64,80,192,0.45); }
-    .footer-loop-ai      .footer-loop-label { color: var(--mint);   text-shadow: 0 0 12px rgba(0,224,184,0.45); }
-    .footer-loop-smart   .footer-loop-label { color: var(--green);  text-shadow: 0 0 12px rgba(62,200,106,0.45); }
+    .footer-loop-digital .footer-loop-label { color: var(--teal);   text-shadow: 0 0 12px rgba(40,219,247,0.45); }
+    .footer-loop-data    .footer-loop-label { color: var(--cobalt); text-shadow: 0 0 12px rgba(96,144,240,0.45); }
+    .footer-loop-ai      .footer-loop-label { color: var(--mint);   text-shadow: 0 0 12px rgba(95,188,144,0.45); }
+    .footer-loop-smart   .footer-loop-label { color: var(--green);  text-shadow: 0 0 12px rgba(91,186,75,0.45); }
 
     .footer-loop-role {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
       color: rgba(200,216,240,0.25);
       margin-top: 5px;
     }
@@ -1060,10 +1063,10 @@
       padding-top: 24px;
       display: flex; justify-content: space-between; align-items: center;
       font-family: 'Share Tech Mono', monospace;
-      font-size: 11px; letter-spacing: 1.5px;
+      font-size: 13px; letter-spacing: 1.5px;
       color: rgba(200,216,240,0.25);
     }
-    .footer-bottom span { color: var(--cyan); }
+    .footer-bottom span { color: var(--amber); }
 
     /* ── CURSOR GLOW ──────────────────────────────────── */
     .cursor-glow {
@@ -1071,7 +1074,7 @@
       pointer-events: none;
       width: 300px; height: 300px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,240,255,0.04) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255,32,128,0.04) 0%, transparent 70%);
       transform: translate(-50%, -50%);
       z-index: 9998;
       transition: opacity 0.3s;
@@ -1086,7 +1089,6 @@
       .about-grid { grid-template-columns: 1fr; }
       .about-visual { display: none; }
       .why-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
       .hero-stats { display: none; }
     }
     @media (max-width: 768px) {
@@ -1097,6 +1099,10 @@
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .form-row { grid-template-columns: 1fr; }
+      /* Contact form — full-width layout on tablet/mobile */
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .contact-form .btn-primary { width: 100%; justify-content: center; }
+      .contact-info-val { word-break: break-word; }
     }
     @media (max-width: 480px) {
       body { font-size: 17px; }
@@ -1105,7 +1111,7 @@
       .cap-grid { grid-template-columns: 1fr; }
       .process-grid { grid-template-columns: 1fr; }
       .loop-grid { grid-template-columns: 1fr; }
-      .section-eyebrow { font-size: 12px; }
+      .section-eyebrow { font-size: 13px; }
       .section-body { font-size: 16px; }
       .service-desc { font-size: 15px; }
       .loop-desc { font-size: 14px; }
@@ -1114,7 +1120,10 @@
       .footer-loop-strip { flex-direction: column; }
       .footer-loop-item { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
       .footer-loop-arrow { display: none; }
-      .contact-grid { gap: 40px; }
+      .contact-grid { gap: 36px; }
+      /* Make form inputs and textareas fully contained */
+      .form-input, .form-textarea { font-size: 16px; width: 100%; }
+      #contact .container { padding: 0 4vw; }
     }
   </style>
 </head>
@@ -1234,15 +1243,15 @@
           </svg>
         </div>
         <div class="loop-word">Digital</div>
-        <div class="loop-role">The Medium</div>
+        <div class="loop-role">The Medium <span class="loop-tag">Pulse</span></div>
         <p class="loop-desc">The environment. Transitioning physical, manual processes into machine‑readable digital flow.</p>
       </div>
 
       <!-- Connector -->
       <div class="loop-arrow" aria-hidden="true">
         <svg viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="12" x2="28" y2="12" stroke="rgba(0,200,232,0.3)" stroke-width="1" stroke-dasharray="4 3"/>
-          <polyline points="22,6 32,12 22,18" stroke="rgba(0,200,232,0.5)" stroke-width="1.5" fill="none"/>
+          <line x1="0" y1="12" x2="28" y2="12" stroke="rgba(40,219,247,0.3)" stroke-width="1" stroke-dasharray="4 3"/>
+          <polyline points="22,6 32,12 22,18" stroke="rgba(40,219,247,0.5)" stroke-width="1.5" fill="none"/>
         </svg>
       </div>
 
@@ -1255,15 +1264,15 @@
           </svg>
         </div>
         <div class="loop-word">Data</div>
-        <div class="loop-role">The Fuel <span class="loop-tag">Precision</span></div>
+        <div class="loop-role">The Fuel <span class="loop-tag loop-tag-data">Precision</span></div>
         <p class="loop-desc">The substance. High‑quality master data that turns a digital environment from noise into signal.</p>
       </div>
 
       <!-- Connector -->
       <div class="loop-arrow" aria-hidden="true">
         <svg viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="12" x2="28" y2="12" stroke="rgba(64,80,192,0.3)" stroke-width="1" stroke-dasharray="4 3"/>
-          <polyline points="22,6 32,12 22,18" stroke="rgba(64,80,192,0.5)" stroke-width="1.5" fill="none"/>
+          <line x1="0" y1="12" x2="28" y2="12" stroke="rgba(96,144,240,0.3)" stroke-width="1" stroke-dasharray="4 3"/>
+          <polyline points="22,6 32,12 22,18" stroke="rgba(96,144,240,0.5)" stroke-width="1.5" fill="none"/>
         </svg>
       </div>
 
@@ -1277,15 +1286,15 @@
           </svg>
         </div>
         <div class="loop-word">AI</div>
-        <div class="loop-role">The Engine <span class="loop-tag loop-tag-purple">Vision</span></div>
+        <div class="loop-role">The Engine <span class="loop-tag loop-tag-ai">Vision</span></div>
         <p class="loop-desc">The intelligence. Finding patterns, predicting trends, and driving decisions across your enterprise.</p>
       </div>
 
       <!-- Connector -->
       <div class="loop-arrow" aria-hidden="true">
         <svg viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="12" x2="28" y2="12" stroke="rgba(62,200,106,0.3)" stroke-width="1" stroke-dasharray="4 3"/>
-          <polyline points="22,6 32,12 22,18" stroke="rgba(62,200,106,0.5)" stroke-width="1.5" fill="none"/>
+          <line x1="0" y1="12" x2="28" y2="12" stroke="rgba(91,186,75,0.3)" stroke-width="1" stroke-dasharray="4 3"/>
+          <polyline points="22,6 32,12 22,18" stroke="rgba(91,186,75,0.5)" stroke-width="1.5" fill="none"/>
         </svg>
       </div>
 
@@ -1559,38 +1568,18 @@
         </div>
       </div>
 
-      <div class="why-visual fade-up" style="transition-delay:0.15s">
-        <div class="why-visual-title">// Technology Stack</div>
-        <div class="tech-stack">
-          <div class="tech-item">Python</div>
-          <div class="tech-item">TensorFlow</div>
-          <div class="tech-item">PyTorch</div>
-          <div class="tech-item">AWS</div>
-          <div class="tech-item">Azure</div>
-          <div class="tech-item">GCP</div>
-          <div class="tech-item">Kafka</div>
-          <div class="tech-item">Spark</div>
-          <div class="tech-item">Kubernetes</div>
-          <div class="tech-item">dbt</div>
-          <div class="tech-item">Snowflake</div>
-          <div class="tech-item">OpenAI</div>
-          <div class="tech-item">LangChain</div>
-          <div class="tech-item">Vector DB</div>
-          <div class="tech-item">Terraform</div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
 
 <!-- ── CREDIBILITY TABLE ───────────────────────────── -->
-<section id="sectors" style="background: #091520; padding: 80px 0;">
+<section id="sectors" style="background: #0e1e38; padding: 80px 0;">
   <div class="container">
     <div class="fade-up" style="text-align:center; max-width:680px; margin:0 auto 50px;">
       <div class="section-eyebrow">Track Record</div>
       <h2 class="section-title">Enterprise <span>Impact by Sector</span></h2>
       <p class="section-body" style="margin:0 auto; text-align:center;">
-        Currently managing mission‑critical data for a global leader in the personal care sector — and delivering specialized solutions across high‑regulation industries.
+        From luxury retail to healthcare and NGOs — we deliver Digital, Data &amp; AI solutions built for the complexity and pace of each sector we serve.
       </p>
     </div>
     <div class="cred-table-wrap fade-up">
@@ -1604,24 +1593,44 @@
         </thead>
         <tbody>
           <tr>
-            <td><span class="cred-sector">Retail</span></td>
-            <td>Data Integration &amp; MDM</td>
-            <td>Unified SKU Management across global footprint</td>
+            <td><span class="cred-sector">Luxury Retail</span></td>
+            <td>Market Intelligence Platform</td>
+            <td>Real-time pricing transparency &amp; scarcity analytics</td>
           </tr>
           <tr>
-            <td><span class="cred-sector">Food Service</span></td>
+            <td><span class="cred-sector">FMCG Retail</span></td>
+            <td>Data Integration &amp; MDM</td>
+            <td>Unified SKU &amp; supply chain visibility at global scale</td>
+          </tr>
+          <tr>
+            <td><span class="cred-sector">Personal Care Retail</span></td>
+            <td>Consumer Data Platform</td>
+            <td>360° customer profiles powering personalised campaigns</td>
+          </tr>
+          <tr>
+            <td><span class="cred-sector">Food Services</span></td>
             <td>O2C Digitalization</td>
-            <td>Improved cash flow velocity &amp; fulfillment accuracy</td>
+            <td>Improved cash flow velocity &amp; fulfilment accuracy</td>
+          </tr>
+          <tr>
+            <td><span class="cred-sector">E-Commerce</span></td>
+            <td>AI Personalisation Engine</td>
+            <td>Uplift in conversion rate through real-time recommendations</td>
+          </tr>
+          <tr>
+            <td><span class="cred-sector">Healthcare</span></td>
+            <td>Compliance Data Pipeline</td>
+            <td>Secure, audit-ready data flows across regulated systems</td>
           </tr>
           <tr>
             <td><span class="cred-sector">Insurance</span></td>
             <td>BrokerSmart CRM</td>
-            <td>Automated onboarding &amp; compliance workflows</td>
+            <td>Automated onboarding &amp; end-to-end compliance workflows</td>
           </tr>
           <tr>
-            <td><span class="cred-sector">Luxury Trade</span></td>
-            <td>WatchSmart Intelligence</td>
-            <td>Global market transparency &amp; scarcity analytics</td>
+            <td><span class="cred-sector">NGO</span></td>
+            <td>Impact Analytics Dashboard</td>
+            <td>Data-driven programme reporting &amp; donor intelligence</td>
           </tr>
         </tbody>
       </table>
@@ -1639,27 +1648,23 @@
   </div>
   <div class="industries-track-wrap">
     <div class="industries-track">
-      <span class="industry-chip">Global Personal Care Retail</span>
-      <span class="industry-chip">Regional Food Service</span>
-      <span class="industry-chip">Insurance Brokerages</span>
-      <span class="industry-chip">Luxury Watch Trade</span>
-      <span class="industry-chip">Financial Services</span>
-      <span class="industry-chip">B2B E-Commerce</span>
-      <span class="industry-chip">AML &amp; Compliance</span>
-      <span class="industry-chip">Enterprise Technology</span>
-      <span class="industry-chip">Data-Driven Retail</span>
-      <span class="industry-chip">Digital Health</span>
+      <span class="industry-chip">Luxury Retail</span>
+      <span class="industry-chip">FMCG Retail</span>
+      <span class="industry-chip">Personal Care Retail</span>
+      <span class="industry-chip">Food Services</span>
+      <span class="industry-chip">E-Commerce</span>
+      <span class="industry-chip">Healthcare</span>
+      <span class="industry-chip">Insurance</span>
+      <span class="industry-chip">NGO</span>
       <!-- Duplicate for seamless loop -->
-      <span class="industry-chip">Global Personal Care Retail</span>
-      <span class="industry-chip">Regional Food Service</span>
-      <span class="industry-chip">Insurance Brokerages</span>
-      <span class="industry-chip">Luxury Watch Trade</span>
-      <span class="industry-chip">Financial Services</span>
-      <span class="industry-chip">B2B E-Commerce</span>
-      <span class="industry-chip">AML &amp; Compliance</span>
-      <span class="industry-chip">Enterprise Technology</span>
-      <span class="industry-chip">Data-Driven Retail</span>
-      <span class="industry-chip">Digital Health</span>
+      <span class="industry-chip">Luxury Retail</span>
+      <span class="industry-chip">FMCG Retail</span>
+      <span class="industry-chip">Personal Care Retail</span>
+      <span class="industry-chip">Food Services</span>
+      <span class="industry-chip">E-Commerce</span>
+      <span class="industry-chip">Healthcare</span>
+      <span class="industry-chip">Insurance</span>
+      <span class="industry-chip">NGO</span>
     </div>
   </div>
 </section>
@@ -1736,11 +1741,11 @@
             <label class="form-label">Message</label>
             <textarea class="form-textarea" placeholder="Tell us about your challenge or goal..."></textarea>
           </div>
-          <button type="submit" class="btn-primary" style="width:fit-content; cursor:pointer; border:none;">
+          <button type="submit" class="btn-primary" style="cursor:pointer; border:none; align-self:flex-start;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             Send Message
           </button>
-          <div id="form-success" style="display:none; color:var(--cyan); font-family:'Share Tech Mono',monospace; font-size:12px; letter-spacing:2px; margin-top:8px;">
+          <div id="form-success" style="display:none; color:var(--cyan); font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:2px; margin-top:8px;">
             ✓ TRANSMISSION RECEIVED — WE'LL BE IN TOUCH WITHIN 24H
           </div>
         </form>
@@ -1836,7 +1841,7 @@
 
     <div class="footer-bottom">
       <span>© 2026 <span>CyberVision</span>. All rights reserved.</span>
-      <span style="font-size:10px; letter-spacing:2px;">PRECISION DATA · INTELLIGENT FUTURES</span>
+      <span style="font-size:13px; letter-spacing:2px;">PRECISION DATA · INTELLIGENT FUTURES</span>
     </div>
   </div>
 </footer>
@@ -1889,7 +1894,7 @@
       links.style.left = '0'; links.style.right = '0';
       links.style.background = 'rgba(2,2,8,0.97)';
       links.style.padding = '24px 5vw';
-      links.style.borderBottom = '1px solid rgba(0,240,255,0.15)';
+      links.style.borderBottom = '1px solid rgba(255,32,128,0.15)';
     }
   });
 
