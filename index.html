@@ -38,7 +38,10 @@
       --darker:  #060f16;   /* deeper teal-blue */
       --dark-green: #081410; /* dark green-tinted sections */
       --neon-pink: #ff2080;  /* eye image hot pink */
-      --amber:   #00e8d0;   /* neon turquoise — eye circuit glow */
+      --amber:     #f0c030;  /* electric amber */
+      --turquoise: #00e8d0;  /* eye circuit glow */
+      --vivid-violet:  #ac31d7;  /* eye vivid violet — backgrounds/accents */
+      --electric-blue: #0f74df;  /* eye deep electric blue — backgrounds/accents */
       --card-bg: rgba(10, 24, 38, 0.94);
       --glass:   rgba(192,96,248, 0.05);
       --border:  rgba(192,96,248, 0.15);
@@ -64,8 +67,8 @@
     .grid-bg {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background-image:
-        linear-gradient(rgba(255,32,128,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(91,186,75,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(15,116,223,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(172,49,215,0.04) 1px, transparent 1px);
       background-size: 60px 60px;
     }
 
@@ -100,19 +103,6 @@
     .nav-logo:hover .nav-logo-img {
       filter: drop-shadow(0 0 12px rgba(0,200,224,0.55)) brightness(1.1);
     }
-    .nav-slogan {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 13px;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      color: rgba(220,232,250,0.45);
-      white-space: nowrap;
-      border-left: 1px solid rgba(255,32,128,0.25);
-      padding-left: 14px;
-      margin-left: 4px;
-      line-height: 1.4;
-    }
-    @media (max-width: 900px) { .nav-slogan { display: none; } }
 
     .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a {
@@ -146,8 +136,8 @@
       clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
     }
     .nav-cta:hover {
-      background: rgba(255,32,128,0.1) !important;
-      box-shadow: 0 0 20px rgba(255,32,128,0.3) !important;
+      background: rgba(192,96,248,0.1) !important;
+      box-shadow: 0 0 20px rgba(192,96,248,0.35) !important;
     }
     .nav-cta::after { display: none !important; }
 
@@ -243,14 +233,16 @@
       display: inline-flex; align-items: center; gap: 10px;
       font-family: 'Share Tech Mono', monospace;
       font-size: 14px;
-      color: var(--cyan);
+      color: var(--turquoise);
       letter-spacing: 3px;
       text-transform: uppercase;
       margin-bottom: 24px;
     }
     .hero-eyebrow::before {
-      content: ''; width: 40px; height: 1px; background: var(--cyan);
-      box-shadow: 0 0 6px var(--cyan);
+      content: '//';
+      margin-right: 4px;
+      opacity: 0.55;
+      font-size: 16px;
     }
 
     .hero-h1 {
@@ -308,6 +300,17 @@
     }
     .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(255,32,128,0.05); }
 
+    .btn-amber {
+      border-color: var(--amber) !important;
+      color: var(--amber) !important;
+    }
+    .btn-amber:hover {
+      border-color: var(--amber) !important;
+      color: #fff !important;
+      background: rgba(240,192,48,0.12) !important;
+      filter: drop-shadow(0 0 10px rgba(240,192,48,0.5));
+    }
+
     .hero-stats {
       position: absolute; bottom: 60px; right: 5vw; z-index: 3;
       display: flex; gap: 40px;
@@ -351,7 +354,7 @@
       display: inline-flex; align-items: center; gap: 10px;
       font-family: 'Share Tech Mono', monospace;
       font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--cyan); margin-bottom: 16px;
+      color: var(--turquoise); margin-bottom: 16px;
     }
     .section-eyebrow::before { content: '//'; margin-right: 4px; opacity: 0.5; }
 
@@ -375,7 +378,11 @@
     }
 
     /* ── ABOUT ────────────────────────────────────────── */
-    #about { background: #132d1e; }  /* dark green tint */
+    #about {
+      background: #0d0820;
+      background-image: radial-gradient(ellipse 70% 60% at 90% 30%, rgba(172,49,215,0.12) 0%, transparent 65%),
+                        radial-gradient(ellipse 50% 40% at 10% 70%, rgba(15,116,223,0.07) 0%, transparent 55%);
+    }
 
     .about-grid {
       display: grid;
@@ -428,8 +435,13 @@
     .pill:hover { border-color: var(--cyan); color: var(--cyan); }
 
     /* ── INTELLIGENCE LOOP ────────────────────────────── */
-    .loop-section { background: #0e1e38; }
+    .loop-section {
+      background: #071020;
+      background-image: radial-gradient(ellipse 80% 60% at 10% 50%, rgba(15,116,223,0.12) 0%, transparent 65%),
+                        radial-gradient(ellipse 60% 50% at 90% 50%, rgba(40,219,247,0.06) 0%, transparent 60%);
+    }
     .loop-header { text-align: center; }
+    .loop-header .section-eyebrow { color: var(--turquoise); }
 
     .loop-grid {
       display: grid;
@@ -568,11 +580,13 @@
 
     /* ── SERVICES ─────────────────────────────────────── */
     #services {
-      background: #0e1e38;
-      background-image: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(96,144,240,0.12) 0%, transparent 70%);
+      background: #0d0820;
+      background-image: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(172,49,215,0.12) 0%, transparent 70%),
+                        radial-gradient(ellipse 40% 40% at 90% 10%, rgba(255,32,128,0.06) 0%, transparent 55%);
     }
 
     .services-header { text-align: center; max-width: 680px; margin: 0 auto 70px; }
+    .services-header .section-eyebrow { color: var(--turquoise); }
     .services-header .section-body { margin: 0 auto; text-align: center; }
 
     .services-grid {
@@ -599,10 +613,12 @@
     .service-card:hover { border-color: rgba(255,32,128,0.4); transform: translateY(-6px); }
     .service-card:hover::before { opacity: 1; }
 
+    .service-card.teal  { --glow-color: var(--teal); }
     .service-card.pink  { --glow-color: var(--pink); }
     .service-card.blue  { --glow-color: var(--blue); }
     .service-card.purple{ --glow-color: var(--purple); }
 
+    .service-card.teal:hover  { border-color: rgba(40,219,247,0.4); }
     .service-card.pink:hover  { border-color: rgba(255,32,128,0.4); }
     .service-card.blue:hover  { border-color: rgba(96,144,240,0.4); }
     .service-card.purple:hover{ border-color: rgba(192,96,248,0.4); }
@@ -616,6 +632,7 @@
     }
     .service-icon svg { width: 26px; height: 26px; }
     .service-icon.c { color: var(--cyan); }
+    .service-icon.t { color: var(--teal); }
     .service-icon.p { color: var(--pink); }
     .service-icon.b { color: var(--blue); }
     .service-icon.pu{ color: var(--purple); }
@@ -649,7 +666,9 @@
       display: inline-block;
       margin-right: 6px;
     }
-    .service-card.blue  .service-list-label { color: var(--blue); }
+    .service-card.teal   .service-list-label { color: var(--teal); }
+    .service-card.blue   .service-list-label { color: var(--blue); }
+    .service-card.pink   .service-list-label { color: var(--pink); }
     .service-card.purple .service-list-label { color: var(--purple); }
 
     .service-desc {
@@ -666,19 +685,21 @@
       padding: 3px 10px;
       opacity: 0.7;
     }
-    .service-card.pink  .service-tag { border-color: rgba(255,32,128,0.2); }
-    .service-card.blue  .service-tag { border-color: rgba(96,144,240,0.2); }
+    .service-card.teal   .service-tag { border-color: rgba(40,219,247,0.2); }
+    .service-card.pink   .service-tag { border-color: rgba(255,32,128,0.2); }
+    .service-card.blue   .service-tag { border-color: rgba(96,144,240,0.2); }
     .service-card.purple .service-tag { border-color: rgba(192,96,248,0.2); }
 
     /* ── CAPABILITIES ROW ─────────────────────────────── */
     #capabilities {
-      background: #132d1e;  /* dark green tint */
+      background: #071020;  /* dark green tint */
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       padding: 80px 0;
     }
 
     .cap-header { text-align: center; margin-bottom: 60px; }
+    .cap-header .section-eyebrow { color: var(--turquoise); }
 
     .cap-grid {
       display: grid;
@@ -711,7 +732,7 @@
       font-family: 'Orbitron', sans-serif;
       font-size: 44px; font-weight: 900;
       color: var(--amber);
-      text-shadow: 0 0 20px rgba(0,232,208,0.4);
+      text-shadow: 0 0 20px rgba(240,192,48,0.4);
       display: block; line-height: 1;
       margin-bottom: 10px;
     }
@@ -723,7 +744,11 @@
     }
 
     /* ── HOW WE WORK ──────────────────────────────────── */
-    #process { background: #0e1e38; }
+    #process {
+      background: #0d0820;
+      background-image: radial-gradient(ellipse 70% 50% at 80% 50%, rgba(172,49,215,0.10) 0%, transparent 65%),
+                        radial-gradient(ellipse 40% 50% at 10% 80%, rgba(0,232,208,0.05) 0%, transparent 55%);
+    }
 
     .process-grid {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
@@ -732,7 +757,7 @@
     .process-grid::before {
       content: ''; position: absolute; top: 32px; left: 12.5%; right: 12.5%;
       height: 1px;
-      background: linear-gradient(90deg, var(--amber), var(--purple));
+      background: linear-gradient(90deg, var(--turquoise), var(--vivid-violet));
       opacity: 0.3;
     }
     @media (max-width: 900px) {
@@ -754,13 +779,13 @@
       margin: 0 auto 24px;
       font-family: 'Orbitron', sans-serif;
       font-size: 16px; font-weight: 900;
-      color: var(--amber);
+      color: var(--turquoise);
       position: relative; z-index: 1;
       transition: border-color 0.3s, box-shadow 0.3s;
     }
     .process-step:hover .process-dot {
-      border-color: var(--amber);
-      box-shadow: 0 0 25px rgba(0,232,208,0.3);
+      border-color: var(--neon-pink);
+      box-shadow: 0 0 25px rgba(255,32,128,0.35);
     }
     .process-step-title {
       font-family: 'Orbitron', sans-serif;
@@ -771,7 +796,7 @@
 
     /* ── WHY CYBERVISION ──────────────────────────────── */
     #why {
-      background: #132d1e;
+      background: #071020;
       background-image: radial-gradient(ellipse 70% 50% at 0% 50%, rgba(91,186,75,0.07) 0%, transparent 70%);
     }
 
@@ -857,7 +882,7 @@
       font-family: 'Rajdhani', sans-serif;
     }
     .cred-table thead tr {
-      border-bottom: 1px solid rgba(0,232,208,0.25);
+      border-bottom: 1px solid rgba(240,192,48,0.25);
     }
     .cred-table th {
       font-family: 'Share Tech Mono', monospace;
@@ -866,10 +891,10 @@
       padding: 12px 20px; text-align: left;
     }
     .cred-table tbody tr {
-      border-bottom: 1px solid rgba(0,232,208,0.07);
+      border-bottom: 1px solid rgba(240,192,48,0.07);
       transition: background 0.2s;
     }
-    .cred-table tbody tr:hover { background: rgba(0,232,208,0.04); }
+    .cred-table tbody tr:hover { background: rgba(240,192,48,0.04); }
     .cred-table td {
       padding: 18px 20px;
       font-size: 16px; color: rgba(220,232,250,0.78);
@@ -882,7 +907,11 @@
     }
 
     /* ── INDUSTRIES ───────────────────────────────────── */
-    #industries { background: #0e1e38; padding: 80px 0; }
+    #industries {
+      background: #0d0820;
+      background-image: radial-gradient(ellipse 90% 50% at 50% 50%, rgba(172,49,215,0.08) 0%, transparent 70%);
+      padding: 80px 0;
+    }
 
     .industries-header { text-align: center; margin-bottom: 50px; }
 
@@ -916,7 +945,7 @@
 
     /* ── CONTACT ──────────────────────────────────────── */
     #contact {
-      background: #132d1e;
+      background: #0d0820;
       background-image: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,32,128,0.05) 0%, transparent 70%);
     }
 
@@ -1026,7 +1055,7 @@
 
     .footer-loop-digital:hover { background: rgba(40,219,247,0.05); }
     .footer-loop-data:hover    { background: rgba(96,144,240,0.05); }
-    .footer-loop-ai:hover      { background: rgba(95,188,144,0.05); }
+    .footer-loop-ai:hover      { background: rgba(95,188,144,0.06); }
     .footer-loop-smart:hover   { background: rgba(91,186,75,0.05); }
 
     .footer-loop-label {
@@ -1066,7 +1095,7 @@
       font-size: 13px; letter-spacing: 1.5px;
       color: rgba(200,216,240,0.25);
     }
-    .footer-bottom span { color: var(--amber); }
+    .footer-bottom span { color: var(--turquoise); }
 
     /* ── CURSOR GLOW ──────────────────────────────────── */
     .cursor-glow {
@@ -1139,7 +1168,6 @@
 <nav id="navbar">
   <a href="#" class="nav-logo">
     <img src="logo-horizontal-web.png" alt="CyberVision" class="nav-logo-img" />
-    <span class="nav-slogan">Precision Data. Intelligent Futures.</span>
   </a>
 
   <ul class="nav-links">
@@ -1164,6 +1192,7 @@
   <div class="hero-scan"></div>
 
   <div class="hero-content">
+    <div class="hero-eyebrow">Precision Data. Intelligent Futures.</div>
     <h1 class="hero-h1">
       Integrating the<br />
       <span class="accent">Digital Pulse.</span><br />
@@ -1178,10 +1207,6 @@
       <a href="#services" class="btn-primary">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
         Explore Services
-      </a>
-      <a href="#contact" class="btn-outline">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Talk to Us
       </a>
     </div>
   </div>
@@ -1342,9 +1367,9 @@
     <div class="services-grid">
 
       <!-- Pillar I: Enterprise Data Services -->
-      <div class="service-card fade-up">
+      <div class="service-card teal fade-up">
         <span class="service-num">01</span>
-        <div class="service-icon c">
+        <div class="service-icon t">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
             <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
           </svg>
@@ -1391,9 +1416,9 @@
       </div>
 
       <!-- Pillar III: AI & UX Consultancy -->
-      <div class="service-card purple fade-up" style="transition-delay:0.2s">
+      <div class="service-card pink fade-up" style="transition-delay:0.2s">
         <span class="service-num">03</span>
-        <div class="service-icon pu">
+        <div class="service-icon p">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
             <path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/>
             <path d="M2 12h2m16 0h2M12 20v2M7.05 19.07l-1.41 1.41M18.36 19.07l1.41 1.41"/>
@@ -1573,7 +1598,7 @@
 </section>
 
 <!-- ── CREDIBILITY TABLE ───────────────────────────── -->
-<section id="sectors" style="background: #0e1e38; padding: 80px 0;">
+<section id="sectors" style="background: #071020; background-image: radial-gradient(ellipse 80% 60% at 30% 50%, rgba(15,116,223,0.10) 0%, transparent 65%); padding: 80px 0;">
   <div class="container">
     <div class="fade-up" style="text-align:center; max-width:680px; margin:0 auto 50px;">
       <div class="section-eyebrow">Track Record</div>
@@ -1638,36 +1663,6 @@
   </div>
 </section>
 
-<!-- ── INDUSTRIES ─────────────────────────────────── -->
-<section id="industries">
-  <div class="container">
-    <div class="industries-header fade-up">
-      <div class="section-eyebrow">Industries</div>
-      <h2 class="section-title">Who We <span>Serve</span></h2>
-    </div>
-  </div>
-  <div class="industries-track-wrap">
-    <div class="industries-track">
-      <span class="industry-chip">Luxury Retail</span>
-      <span class="industry-chip">FMCG Retail</span>
-      <span class="industry-chip">Personal Care Retail</span>
-      <span class="industry-chip">Food Services</span>
-      <span class="industry-chip">E-Commerce</span>
-      <span class="industry-chip">Healthcare</span>
-      <span class="industry-chip">Insurance</span>
-      <span class="industry-chip">NGO</span>
-      <!-- Duplicate for seamless loop -->
-      <span class="industry-chip">Luxury Retail</span>
-      <span class="industry-chip">FMCG Retail</span>
-      <span class="industry-chip">Personal Care Retail</span>
-      <span class="industry-chip">Food Services</span>
-      <span class="industry-chip">E-Commerce</span>
-      <span class="industry-chip">Healthcare</span>
-      <span class="industry-chip">Insurance</span>
-      <span class="industry-chip">NGO</span>
-    </div>
-  </div>
-</section>
 
 <!-- ── CONTACT ────────────────────────────────────── -->
 <section id="contact">
@@ -1841,7 +1836,7 @@
 
     <div class="footer-bottom">
       <span>© 2026 <span>CyberVision</span>. All rights reserved.</span>
-      <span style="font-size:13px; letter-spacing:2px;">PRECISION DATA · INTELLIGENT FUTURES</span>
+      <span style="font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:2px; color:rgba(200,216,240,0.25);">PRECISION DATA · INTELLIGENT FUTURES</span>
     </div>
   </div>
 </footer>
